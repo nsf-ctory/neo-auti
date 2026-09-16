@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import { Phone, RotateCcw } from "lucide-react";
-import { ChatInput } from "./components/ChatInput";
-import { ChatMessage } from "./components/ChatMessage";
-import { Header } from "./components/Header";
-import { LiveVoiceModal } from "./components/LiveVoiceModal";
-import { PersonaEditor } from "./components/PersonaEditor";
-import { INITIAL_PERSONAS } from "./data/presetPersonas";
-import { ChatMessageAttachment, Message, Persona } from "./types";
-import { synthesizeSystemInstruction } from "./utils/promptSynthesizer";
+import { Phone, RotateCcw } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ChatInput } from './components/ChatInput';
+import { ChatMessage } from './components/ChatMessage';
+import { Header } from './components/Header';
+import { LiveVoiceModal } from './components/LiveVoiceModal';
+import { PersonaEditor } from './components/PersonaEditor';
+import { INITIAL_PERSONAS } from './data/presetPersonas';
+import { ChatMessageAttachment, Message, Persona } from './types';
+import { synthesizeSystemInstruction } from './utils/promptSynthesizer';
 
-const LOCAL_STORAGE_KEY = "persona_studio_saved_personas_v2";
-const ACTIVE_PERSONA_KEY = "persona_studio_active_id_v2";
-const THEME_KEY = "persona_studio_theme_v1";
+const LOCAL_STORAGE_KEY = 'persona_studio_saved_personas_v2';
+const ACTIVE_PERSONA_KEY = 'persona_studio_active_id_v2';
+const THEME_KEY = 'persona_studio_theme_v1';
 
 declare global {
   interface Window {
@@ -24,35 +24,38 @@ declare global {
 
 export default function App() {
   // Theme state: dark or light
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try {
       const savedTheme = localStorage.getItem(THEME_KEY);
-      if (savedTheme === "dark" || savedTheme === "light") return savedTheme;
-      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        return "dark";
+      if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+      if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      ) {
+        return 'dark';
       }
     } catch (e) {
-      console.error("Error reading theme preference", e);
+      console.error('Error reading theme preference', e);
     }
-    return "dark"; // default to elegant dark mode
+    return 'dark'; // default to elegant dark mode
   });
 
   // Apply dark class to html document element
   useEffect(() => {
     try {
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove('dark');
       }
       localStorage.setItem(THEME_KEY, theme);
     } catch (e) {
-      console.error("Error saving theme", e);
+      console.error('Error saving theme', e);
     }
   }, [theme]);
 
   const handleToggleTheme = () => {
-    setTheme((prev: string) => (prev === "dark" ? "light" : "dark"));
+    setTheme((prev: string) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   // Single sovereign persona: >_ neøtiko with full persistent knowledge base
@@ -69,7 +72,8 @@ export default function App() {
   const [isLiveModalOpen, setIsLiveModalOpen] = useState(false);
   const [isThinkingMode, setIsThinkingMode] = useState(false);
   const [isSearchGrounding, setIsSearchGrounding] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<string>("gemini-3.8-flash");
+  const [selectedModel, setSelectedModel] =
+    useState<string>('gemini-3.8-flash');
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -79,7 +83,7 @@ export default function App() {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(personas));
       localStorage.setItem(ACTIVE_PERSONA_KEY, activePersonaId);
     } catch (e) {
-      console.error("Error saving to localStorage", e);
+      console.error('Error saving to localStorage', e);
     }
   }, [personas, activePersonaId]);
 
@@ -87,12 +91,12 @@ export default function App() {
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      if (params.get("config") === "true" || params.get("edit") === "true") {
+      if (params.get('config') === 'true' || params.get('edit') === 'true') {
         setIsEditorOpen(true);
       }
-      const ttclid = params.get("ttclid");
+      const ttclid = params.get('ttclid');
       if (ttclid) {
-        sessionStorage.setItem("neo_ttclid", ttclid);
+        sessionStorage.setItem('neo_ttclid', ttclid);
       }
     } catch (e) {
       // ignore
@@ -104,8 +108,8 @@ export default function App() {
     if (messages.length === 0) {
       setMessages([
         {
-          id: "welcome",
-          role: "assistant",
+          id: 'welcome',
+          role: 'assistant',
           content: `Olá! Eu sou o **${activePersona.name}**, seu agente de atendimento inteligente e humanizado.\n\nComo posso te ajudar hoje? Você pode digitar sua dúvida, anexar imagens ou tocar em **"Voz ao Vivo"** no topo para falarmos em tempo real.`,
           timestamp: Date.now(),
         },
@@ -115,13 +119,11 @@ export default function App() {
 
   // Auto-scroll messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
   const handleUpdateActivePersona = (updated: Persona) => {
-    setPersonas((prev) =>
-      prev.map((p) => (p.id === updated.id ? updated : p)),
-    );
+    setPersonas((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   };
 
   const handleClearChat = () => {
@@ -130,7 +132,7 @@ export default function App() {
 
   const handleStartLiveCall = () => {
     try {
-      window.ttq?.track("Contact", { content_name: "live_voice_call" });
+      window.ttq?.track('Contact', { content_name: 'live_voice_call' });
     } catch (e) {
       // ignore
     }
@@ -140,19 +142,19 @@ export default function App() {
   const handleSendMessage = async (
     text: string,
     image?: ChatMessageAttachment,
-    options?: { isThinking?: boolean; searchGrounding?: boolean },
+    options?: { isThinking?: boolean; searchGrounding?: boolean }
   ) => {
     if (!text && !image) return;
 
     try {
-      window.ttq?.track("Contact", { content_name: "chat_message_sent" });
+      window.ttq?.track('Contact', { content_name: 'chat_message_sent' });
     } catch (e) {
       // ignore
     }
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
-      role: "user",
+      role: 'user',
       content: text,
       timestamp: Date.now(),
       image,
@@ -166,18 +168,19 @@ export default function App() {
     const assistantMessageId = `assistant-${Date.now()}`;
     const assistantPlaceholder: Message = {
       id: assistantMessageId,
-      role: "assistant",
-      content: "",
+      role: 'assistant',
+      content: '',
       timestamp: Date.now(),
       isThinking: options?.isThinking,
     };
     setMessages([...newMessages, assistantPlaceholder]);
 
     try {
-      const synthesizedSystemInstruction = synthesizeSystemInstruction(activePersona);
+      const synthesizedSystemInstruction =
+        synthesizeSystemInstruction(activePersona);
 
       const historyPayload = newMessages
-        .filter((m) => m.id !== "welcome" && m.id !== assistantMessageId)
+        .filter((m) => m.id !== 'welcome' && m.id !== assistantMessageId)
         .map((m) => ({
           role: m.role,
           content: m.content,
@@ -189,11 +192,13 @@ export default function App() {
             : undefined,
         }));
 
-      const modelToUse = options?.isThinking ? "gemini-3.1-pro-preview" : selectedModel;
+      const modelToUse = options?.isThinking
+        ? 'gemini-3.1-pro-preview'
+        : selectedModel;
 
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: historyPayload,
           systemInstruction: synthesizedSystemInstruction,
@@ -208,26 +213,26 @@ export default function App() {
       });
 
       if (!res.ok) {
-        throw new Error("Falha ao comunicar com o servidor");
+        throw new Error('Falha ao comunicar com o servidor');
       }
 
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
-      let assistantText = "";
+      let assistantText = '';
       let sources: any[] = [];
 
       if (reader) {
-        let buffer = "";
+        let buffer = '';
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop() || "";
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
 
           for (const line of lines) {
-            if (line.startsWith("data: ")) {
+            if (line.startsWith('data: ')) {
               const dataStr = line.slice(6).trim();
               if (!dataStr) continue;
 
@@ -237,16 +242,18 @@ export default function App() {
                   assistantText += parsed.text;
                   setMessages((prev) =>
                     prev.map((msg) =>
-                      msg.id === assistantMessageId ? { ...msg, content: assistantText } : msg,
-                    ),
+                      msg.id === assistantMessageId
+                        ? { ...msg, content: assistantText }
+                        : msg
+                    )
                   );
                 }
                 if (parsed.sources) {
                   sources = parsed.sources;
                   setMessages((prev) =>
                     prev.map((msg) =>
-                      msg.id === assistantMessageId ? { ...msg, sources } : msg,
-                    ),
+                      msg.id === assistantMessageId ? { ...msg, sources } : msg
+                    )
                   );
                 }
               } catch (e) {
@@ -257,17 +264,17 @@ export default function App() {
         }
       }
     } catch (err) {
-      console.error("Chat error:", err);
+      console.error('Chat error:', err);
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMessageId
             ? {
                 ...msg,
                 content:
-                  "Desculpe, ocorreu uma instabilidade momentânea no atendimento. Por favor, tente novamente em instantes.",
+                  'Desculpe, ocorreu uma instabilidade momentânea no atendimento. Por favor, tente novamente em instantes.',
               }
-            : msg,
-        ),
+            : msg
+        )
       );
     } finally {
       setIsLoading(false);
@@ -291,7 +298,7 @@ export default function App() {
                   {/* Halo Visualizer Rings (Siri / Gemini Live pulse) */}
                   <div className="relative flex items-center justify-center mb-6">
                     <div className="absolute w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#fe2c55]/10 animate-ping opacity-25" />
-                    <div className="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-[#fe2c55]/25 via-[#00f2fe]/20 to-[#d7fe09]/15 blur-xl animate-pulse" />
+                    <div className="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-linear-to-tr from-[#fe2c55]/25 via-[#00f2fe]/20 to-[#d7fe09]/15 blur-xl animate-pulse" />
                     <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-zinc-900 border-2 border-white/10 shadow-[0_0_30px_rgba(254,44,85,0.2)] p-2.5 overflow-hidden flex items-center justify-center ring-2 ring-[#00f2fe]/30">
                       <img
                         src={activePersona.avatar}
@@ -311,7 +318,9 @@ export default function App() {
                       Atendimento &gt;_ neøtiko
                     </h2>
                     <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#9bb7c3] leading-relaxed">
-                      Triagem e assessoria oficial TikTok Shop & Creators. Inicie uma chamada ao vivo agora ou envie mensagens gravadas de áudio.
+                      Triagem e assessoria oficial TikTok Shop & Creators.
+                      Inicie uma chamada ao vivo agora ou envie mensagens
+                      gravadas de áudio.
                     </p>
                   </div>
 
@@ -325,7 +334,9 @@ export default function App() {
                       <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Phone className="w-4 h-4 fill-current text-white animate-pulse" />
                       </div>
-                      <span className="tracking-tight">Iniciar Chamada ao Vivo</span>
+                      <span className="tracking-tight">
+                        Iniciar Chamada ao Vivo
+                      </span>
                     </button>
                     <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
                       ou use o microfone abaixo para gravar áudio
@@ -335,7 +346,11 @@ export default function App() {
               )}
 
               {messages.map((msg: Message) => (
-                <ChatMessage key={msg.id} message={msg} persona={activePersona} />
+                <ChatMessage
+                  key={msg.id}
+                  message={msg}
+                  persona={activePersona}
+                />
               ))}
 
               {isLoading && (
@@ -387,7 +402,9 @@ export default function App() {
               isThinkingMode={isThinkingMode}
               onToggleThinking={() => setIsThinkingMode((prev: any) => !prev)}
               isSearchGrounding={isSearchGrounding}
-              onToggleSearchGrounding={() => setIsSearchGrounding((prev: any) => !prev)}
+              onToggleSearchGrounding={() =>
+                setIsSearchGrounding((prev: any) => !prev)
+              }
             />
           </div>
         )}

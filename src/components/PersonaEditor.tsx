@@ -121,7 +121,7 @@ export function PersonaEditor({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white active:scale-95 rounded-full transition-transform"
+          className="min-h-11 min-w-11 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white active:scale-95 rounded-full transition-transform"
           title="Fechar"
         >
           <X className="w-5 h-5" />
@@ -133,7 +133,7 @@ export function PersonaEditor({
         <button
           type="button"
           onClick={() => setActiveTab('prompt')}
-          className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
+          className={`min-h-11 px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'prompt'
               ? 'border-zinc-900 dark:border-[#fe2c55] text-zinc-950 dark:text-white'
               : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -146,7 +146,7 @@ export function PersonaEditor({
         <button
           type="button"
           onClick={() => setActiveTab('humanization')}
-          className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
+          className={`min-h-11 px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'humanization'
               ? 'border-zinc-900 dark:border-[#00f2fe] text-zinc-950 dark:text-white'
               : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -159,7 +159,7 @@ export function PersonaEditor({
         <button
           type="button"
           onClick={() => setActiveTab('settings')}
-          className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
+          className={`min-h-11 px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'settings'
               ? 'border-zinc-900 dark:border-[#d7fe09] text-zinc-950 dark:text-white'
               : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -256,7 +256,7 @@ export function PersonaEditor({
                     key={v.name}
                     type="button"
                     onClick={() => updateHumanization('speakingVoice', v.name as any)}
-                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
+                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-11 ${
                       persona.humanization.speakingVoice === v.name
                         ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
                         : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
@@ -324,7 +324,7 @@ export function PersonaEditor({
                     key={p.id}
                     type="button"
                     onClick={() => updateHumanization('pacing', p.id as any)}
-                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
+                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-11 ${
                       persona.humanization.pacing === p.id
                         ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
                         : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
@@ -352,7 +352,7 @@ export function PersonaEditor({
                     key={f.id}
                     type="button"
                     onClick={() => updateHumanization('formality', f.id as any)}
-                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
+                    className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-11 ${
                       persona.humanization.formality === f.id
                         ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
                         : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'

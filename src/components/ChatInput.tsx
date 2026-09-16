@@ -1,10 +1,5 @@
-import { useState, useRef } from 'react';
-import {
-  Mic,
-  Loader2,
-  Radio,
-  Send,
-} from 'lucide-react';
+import { Loader2, Mic, Radio, Send } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { ChatMessageAttachment } from '../types';
 
 interface ChatInputProps {
@@ -147,14 +142,14 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={cancelRecording}
-                className="min-h-[44px] px-3 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 font-medium active:scale-95 transition-all"
+                className="min-h-11 px-3 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 font-medium active:scale-95 transition-all"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={stopRecording}
-                className="min-h-[44px] px-4 bg-[#fe2c55] hover:bg-[#e0264b] active:bg-[#c91e41] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm shadow-[#fe2c55]/30 active:scale-95 transition-all"
+                className="min-h-11 px-4 bg-[#fe2c55] hover:bg-[#e0264b] active:bg-[#c91e41] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm shadow-[#fe2c55]/30 active:scale-95 transition-all"
               >
                 <Send className="w-3.5 h-3.5 fill-current" />
                 <span>Enviar</span>
@@ -189,7 +184,7 @@ export function ChatInput({
               type="button"
               onClick={onStartLiveCall}
               disabled={isLoading}
-              className="min-h-[50px] px-4 sm:px-5 rounded-2xl bg-[#fe2c55] hover:bg-[#e0264b] active:bg-[#c91e41] text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-md shadow-[#fe2c55]/25 active:scale-98 transition-all disabled:opacity-50 shrink-0"
+              className="min-h-12.5 px-4 sm:px-5 rounded-2xl bg-[#fe2c55] hover:bg-[#e0264b] active:bg-[#c91e41] text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-md shadow-[#fe2c55]/25 active:scale-98 transition-all disabled:opacity-50 shrink-0"
               title="Iniciar chamada de voz ao vivo em tempo real"
             >
               <Radio className="w-4 h-4 animate-pulse" />

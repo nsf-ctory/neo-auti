@@ -163,7 +163,7 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
               type="button"
               onClick={handleCopy}
               title="Copiar mensagem"
-              className="min-h-[36px] min-w-[36px] flex items-center justify-center hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-800 active:scale-95 rounded-lg transition-all"
+              className="min-h-9 min-w-9 flex items-center justify-center hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-800 active:scale-95 rounded-lg transition-all"
             >
               {copied ? (
                 <Check className="w-4 h-4 text-[#00f2fe]" />
