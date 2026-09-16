@@ -308,7 +308,7 @@ export function ChatInput({
                 type="button"
                 onClick={onStartLiveCall}
                 disabled={isLoading}
-                title="Chamada de voz em tempo real (Gemini Live)"
+                title="Chamada de voz ao vivo"
                 className="min-h-[44px] min-w-[44px] flex items-center justify-center text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 active:scale-95 rounded-xl transition-all"
               >
                 <Radio className="w-5 h-5 animate-pulse" />

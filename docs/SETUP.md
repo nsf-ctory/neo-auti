@@ -6,7 +6,7 @@ Este documento detalha como estruturar, desenvolver e colocar em produção a ar
 
 ## 1. Visão Geral da Arquitetura
 
-```
+```text
                ┌────────────────────────────────────────┐
                │         Frontend (Astro + React)       │
                │  - Páginas estáticas / SSR no Astro    │
@@ -37,7 +37,7 @@ Este documento detalha como estruturar, desenvolver e colocar em produção a ar
 
 ## 2. Estrutura do Repositório (Monorepo pnpm)
 
-```
+```text
 meu-projeto/
 ├── pnpm-workspace.yaml
 ├── package.json
@@ -70,13 +70,15 @@ meu-projeto/
 
 ## 3. Configuração do Monorepo (`pnpm`)
 
-### `pnpm-workspace.yaml` (na raiz)
+`pnpm-workspace.yaml` (na raiz)
+
 ```yaml
 packages:
   - 'apps/*'
 ```
 
 ### `package.json` (raiz)
+
 ```json
 {
   "name": "persona-studio-monorepo",
@@ -95,6 +97,7 @@ packages:
 ## 4. Backend API (`apps/api`)
 
 ### `apps/api/package.json`
+
 ```json
 {
   "name": "api",
@@ -125,6 +128,7 @@ packages:
 ```
 
 ### Destaques do Servidor (`apps/api/src/server.ts`)
+
 - Servidor HTTP nativo acoplado ao `WebSocketServer` na rota `/api/live`.
 - Suporte a CORS para permitir conexões do domínio do Astro em produção e desenvolvimento.
 - Conexão com `@google/genai` usando `ai.live.connect` para streaming de áudio bidirecional em tempo real (16kHz PCM input, 24kHz PCM output).
@@ -134,6 +138,7 @@ packages:
 ## 5. Frontend Astro (`apps/web`)
 
 ### `apps/web/package.json`
+
 ```json
 {
   "name": "web",
@@ -158,6 +163,7 @@ packages:
 ```
 
 ### `apps/web/astro.config.mjs`
+
 ```javascript
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
@@ -172,6 +178,7 @@ export default defineConfig({
 ```
 
 ### `apps/web/src/pages/index.astro`
+
 ```astro
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -189,6 +196,7 @@ import App from '../components/App.tsx';
 ## 6. Variáveis de Ambiente
 
 ### `apps/api/.env`
+
 ```env
 PORT=3000
 GEMINI_API_KEY=sua_chave_aqui
@@ -196,6 +204,7 @@ ALLOWED_ORIGIN=http://localhost:4321
 ```
 
 ### `apps/web/.env`
+
 ```env
 PUBLIC_API_URL=http://localhost:3000
 PUBLIC_WS_URL=ws://localhost:3000
@@ -208,6 +217,7 @@ PUBLIC_WS_URL=ws://localhost:3000
 O Railway possui suporte nativo a monorepos e containers Node.js persistentes com WebSockets:
 
 ### Serviço 1: Backend (`apps/api`)
+
 1. Crie um novo serviço no Railway a partir do seu repositório GitHub.
 2. Nas configurações do serviço (**Settings**):
    - **Root Directory**: `apps/api`
@@ -220,6 +230,7 @@ O Railway possui suporte nativo a monorepos e containers Node.js persistentes co
 4. Em **Networking**, clique em **Generate Domain** (ex: `api-production.up.railway.app`).
 
 ### Serviço 2: Frontend (`apps/web`)
+
 1. Adicione um segundo serviço no mesmo projeto do Railway a partir do mesmo repositório.
 2. Nas configurações (**Settings**):
    - **Root Directory**: `apps/web`
@@ -235,6 +246,7 @@ O Railway possui suporte nativo a monorepos e containers Node.js persistentes co
 ## 8. Persistência de Dados no Railway (Opcional)
 
 Se desejar persistir histórico de conversas e personas além do `localStorage` do navegador:
+
 1. No painel do projeto no Railway, clique em **New > Database > PostgreSQL**.
 2. Conecte sua `apps/api` ao banco usando a variável `DATABASE_URL` injetada automaticamente pelo Railway.
 3. Utilize um ORM leve como **Drizzle ORM** ou **Prisma** para salvar as mensagens e personas dos usuários.

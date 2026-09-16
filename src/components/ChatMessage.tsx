@@ -1,7 +1,15 @@
-import { useState, useRef } from 'react';
+import {
+  Brain,
+  Check,
+  Copy,
+  ExternalLink,
+  Loader2,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
+import { useRef, useState } from 'react';
 import Markdown from 'react-markdown';
 import { Message, Persona } from '../types';
-import { Volume2, VolumeX, Copy, Check, ExternalLink, Brain, Loader2 } from 'lucide-react';
 
 interface ChatMessageProps {
   message: Message;
@@ -89,7 +97,9 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
       <div className="shrink-0">
         {isAssistant ? (
           <div className="w-8 h-8 rounded-xl bg-stone-900 dark:bg-stone-800 text-white dark:text-stone-100 flex items-center justify-center text-sm shadow-xs select-none border border-stone-800 dark:border-stone-700 overflow-hidden">
-            {persona.avatar && (persona.avatar.startsWith('/') || persona.avatar.startsWith('http')) ? (
+            {persona.avatar &&
+            (persona.avatar.startsWith('/') ||
+              persona.avatar.startsWith('http')) ? (
               <img
                 src={persona.avatar}
                 alt={persona.name}
@@ -134,8 +144,10 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
                 type="button"
                 onClick={handlePlayTTS}
                 disabled={isLoadingAudio}
-                title={isPlayingAudio ? 'Pausar áudio' : 'Ouvir resposta (Voz Gemini)'}
-                className="min-h-[36px] min-w-[36px] flex items-center justify-center hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-stone-800 active:scale-95 rounded-lg transition-all"
+                title={
+                  isPlayingAudio ? 'Pausar áudio' : 'Ouvir resposta por voz'
+                }
+                className="min-h-9 min-w-9 flex items-center justify-center hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-stone-800 active:scale-95 rounded-lg transition-all"
               >
                 {isLoadingAudio ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -153,7 +165,11 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
               title="Copiar mensagem"
               className="min-h-[36px] min-w-[36px] flex items-center justify-center hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-stone-800 active:scale-95 rounded-lg transition-all"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              {copied ? (
+                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
@@ -171,7 +187,7 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
         )}
 
         {/* Text Content with high readability in dark mode */}
-        <div className="text-sm text-stone-800 dark:text-stone-200 leading-relaxed break-words">
+        <div className="text-sm text-stone-800 dark:text-stone-200 leading-relaxed wrap-break-word">
           {isAssistant ? (
             <div className="prose prose-stone dark:prose-invert max-w-none text-sm leading-relaxed prose-p:my-2 prose-headings:my-3 prose-pre:bg-stone-900 dark:prose-pre:bg-stone-950 prose-pre:text-stone-100 prose-pre:p-3 prose-pre:rounded-xl prose-pre:border prose-pre:border-stone-800 prose-code:font-mono prose-code:text-xs">
               <Markdown>{message.content}</Markdown>
@@ -199,7 +215,9 @@ export function ChatMessage({ message, persona }: ChatMessageProps) {
                     className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 border border-stone-200 dark:border-stone-700 transition-colors"
                   >
                     <ExternalLink className="w-2.5 h-2.5" />
-                    <span className="max-w-[200px] truncate">{chunk.web.title || chunk.web.uri}</span>
+                    <span className="max-w-50 truncate">
+                      {chunk.web.title || chunk.web.uri}
+                    </span>
                   </a>
                 );
               })}

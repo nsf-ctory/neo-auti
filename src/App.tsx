@@ -12,6 +12,15 @@ const LOCAL_STORAGE_KEY = "persona_studio_saved_personas_v2";
 const ACTIVE_PERSONA_KEY = "persona_studio_active_id_v2";
 const THEME_KEY = "persona_studio_theme_v1";
 
+declare global {
+  interface Window {
+    ttq?: {
+      track: (event: string, params?: Record<string, unknown>) => void;
+      page: () => void;
+    };
+  }
+}
+
 export default function App() {
   // Theme state: dark or light
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -72,15 +81,6 @@ export default function App() {
       console.error("Error saving to localStorage", e);
     }
   }, [personas, activePersonaId]);
-
-declare global {
-  interface Window {
-    ttq?: {
-      track: (event: string, params?: Record<string, unknown>) => void;
-      page: () => void;
-    };
-  }
-}
 
   // Check if ?config=true or ?edit=true in URL to allow developer access without exposing UI button
   useEffect(() => {
