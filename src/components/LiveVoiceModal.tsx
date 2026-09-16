@@ -252,7 +252,7 @@ export function LiveVoiceModal({
   return (
     <div
       id="live-voice-modal-overlay"
-      className="fixed inset-0 z-50 bg-stone-950/90 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-8 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-[#0b0b0c]/95 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-8 animate-in fade-in duration-200"
     >
       {/* Top bar with official neøflow partner logo */}
       <div className="w-full max-w-xl flex items-center justify-center pt-2 sm:pt-4 text-white">
@@ -267,9 +267,9 @@ export function LiveVoiceModal({
       <div className="flex flex-col items-center justify-center my-auto space-y-6 text-center">
         {/* Pulsing Avatar Sphere with Concentric Audio Rings */}
         <div className="relative flex items-center justify-center">
-          {/* Ambient audio ripples */}
+          {/* Ambient audio ripples (TikTok brand duo glow) */}
           <div
-            className="absolute rounded-full bg-rose-500/20 blur-2xl transition-all duration-100 pointer-events-none"
+            className="absolute rounded-full bg-[#fe2c55]/20 blur-2xl transition-all duration-100 pointer-events-none"
             style={{
               width: `${180 + assistantVolume * 260}px`,
               height: `${180 + assistantVolume * 260}px`,
@@ -278,7 +278,7 @@ export function LiveVoiceModal({
           />
           {/* Outer concentric ring */}
           <div
-            className="absolute rounded-full border border-stone-800/60 transition-all duration-200 pointer-events-none"
+            className="absolute rounded-full border border-white/10 transition-all duration-200 pointer-events-none"
             style={{
               width: `${240 + (status === 'speaking' ? assistantVolume * 140 : userVolume * 90)}px`,
               height: `${240 + (status === 'speaking' ? assistantVolume * 140 : userVolume * 90)}px`,
@@ -286,7 +286,7 @@ export function LiveVoiceModal({
           />
           {/* Inner concentric ring */}
           <div
-            className="absolute rounded-full border border-stone-700/60 transition-all duration-150 pointer-events-none"
+            className="absolute rounded-full border border-[#00f2fe]/20 transition-all duration-150 pointer-events-none"
             style={{
               width: `${170 + (status === 'speaking' ? assistantVolume * 100 : userVolume * 60)}px`,
               height: `${170 + (status === 'speaking' ? assistantVolume * 100 : userVolume * 60)}px`,
@@ -294,7 +294,7 @@ export function LiveVoiceModal({
           />
 
           {/* Central Avatar */}
-          <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-stone-900 border-2 border-stone-700/70 shadow-2xl flex items-center justify-center select-none overflow-hidden p-2">
+          <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-[#121214] border-2 border-white/15 shadow-2xl flex items-center justify-center select-none overflow-hidden p-2">
             {persona.avatar &&
             (persona.avatar.startsWith('/') ||
               persona.avatar.startsWith('http')) ? (
@@ -318,25 +318,25 @@ export function LiveVoiceModal({
 
           <div className="pt-1">
             {status === 'connecting' && (
-              <span className="inline-flex items-center gap-2 text-xs text-amber-400 bg-amber-950/40 border border-amber-900/60 px-4 py-1.5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              <span className="inline-flex items-center gap-2 text-xs text-[#d7fe09] bg-[#d7fe09]/10 border border-[#d7fe09]/30 px-4 py-1.5 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-[#d7fe09] animate-ping" />
                 Conectando...
               </span>
             )}
             {status === 'listening' && (
-              <span className="inline-flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-900/60 px-4 py-1.5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-2 text-xs text-[#00f2fe] bg-[#00f2fe]/10 border border-[#00f2fe]/30 px-4 py-1.5 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-[#00f2fe] animate-pulse" />
                 Ouvindo você...
               </span>
             )}
             {status === 'speaking' && (
-              <span className="inline-flex items-center gap-2 text-xs text-sky-400 bg-sky-950/40 border border-sky-900/60 px-4 py-1.5 rounded-full">
+              <span className="inline-flex items-center gap-2 text-xs text-[#fe2c55] bg-[#fe2c55]/10 border border-[#fe2c55]/30 px-4 py-1.5 rounded-full">
                 <Volume2 className="w-3.5 h-3.5 animate-bounce" />
                 {persona.name} está falando...
               </span>
             )}
             {status === 'error' && (
-              <span className="inline-flex items-center gap-2 text-xs text-rose-400 bg-rose-950/40 border border-rose-900/60 px-4 py-1.5 rounded-full">
+              <span className="inline-flex items-center gap-2 text-xs text-[#fe2c55] bg-[#fe2c55]/10 border border-[#fe2c55]/30 px-4 py-1.5 rounded-full">
                 {errorMessage || 'Erro na chamada de voz'}
               </span>
             )}
@@ -345,12 +345,12 @@ export function LiveVoiceModal({
 
         {/* Live Subtitles / Conversation preview */}
         {conversationLog.length > 0 && (
-          <div className="max-w-md w-full max-h-24 overflow-y-auto px-4 py-2 rounded-xl bg-stone-900/60 border border-stone-800/80 text-xs text-stone-300 text-left space-y-1.5 backdrop-blur-xs">
+          <div className="max-w-md w-full max-h-24 overflow-y-auto px-4 py-2 rounded-xl bg-[#121214]/80 border border-white/10 text-xs text-zinc-300 text-left space-y-1.5 backdrop-blur-xs">
             {conversationLog.slice(-2).map((item, idx) => (
               <div key={idx} className="leading-relaxed">
                 <strong
                   className={
-                    item.role === 'user' ? 'text-stone-100' : 'text-rose-400'
+                    item.role === 'user' ? 'text-white' : 'text-[#00f2fe]'
                   }
                 >
                   {item.role === 'user' ? 'Você: ' : `${persona.name}: `}
@@ -370,8 +370,8 @@ export function LiveVoiceModal({
           onClick={() => setIsMuted((prev) => !prev)}
           className={`p-4 rounded-full border transition-all ${
             isMuted
-              ? 'bg-rose-950/80 border-rose-700 text-rose-300 hover:bg-rose-900'
-              : 'bg-stone-900/90 border-stone-800 text-stone-300 hover:text-white hover:bg-stone-800'
+              ? 'bg-[#fe2c55]/20 border-[#fe2c55]/60 text-[#fe2c55] hover:bg-[#fe2c55]/30'
+              : 'bg-zinc-900/90 border-white/10 text-zinc-300 hover:text-white hover:bg-zinc-800'
           }`}
           title={isMuted ? 'Desmutar microfone' : 'Mutar microfone'}
         >
@@ -387,7 +387,7 @@ export function LiveVoiceModal({
           id="end-live-call-btn"
           type="button"
           onClick={handleEndCall}
-          className="p-5 rounded-full bg-[#fe2c55] hover:bg-[#e0264b] text-white shadow-xl shadow-rose-950/50 transition-transform hover:scale-105 active:scale-95"
+          className="p-5 rounded-full bg-[#fe2c55] hover:bg-[#e0264b] text-white shadow-xl shadow-[#fe2c55]/30 transition-transform hover:scale-105 active:scale-95"
           title="Encerrar conversa por voz"
         >
           <PhoneOff className="w-7 h-7" />

@@ -2,6 +2,21 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  /* Canvas & Surfaces — Grafite canônico NEØ */
+  --neo-bg: #0b0b0c;
+  --neo-bg-card: rgba(18, 18, 20, 0.75);
+  --neo-bg-subtle: #050505;
+  --neo-border: rgba(255, 255, 255, 0.10);
+
+  /* Semantic Brand Accents */
+  --neo-acid: #d7fe09;
+  --neo-coral: #fe2c55;
+  --neo-cyan: #00f2fe;
+  --neo-white: #ffffff;
+  --neo-text-muted: #9bb7c3;
+}
+
 /* Smooth transition for theme toggle */
 html {
   color-scheme: light dark;
@@ -9,4 +24,5 @@ html {
 
 html.dark {
   color-scheme: dark;
+  background-color: var(--neo-bg);
 }

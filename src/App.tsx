@@ -281,7 +281,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-dvh w-full bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 font-sans antialiased select-auto overflow-hidden transition-colors">
+    <div className="flex flex-col h-dvh w-full bg-zinc-50 dark:bg-[#0b0b0c] text-zinc-900 dark:text-zinc-100 font-sans antialiased select-auto overflow-hidden transition-colors">
       {/* Sleek Mobile-First Header */}
       <Header
         activePersona={activePersona}
@@ -296,7 +296,7 @@ export default function App() {
       {/* Main Content Area */}
       <div className="flex-1 flex relative overflow-hidden">
         {/* Clean, Focused Chat Stream */}
-        <main className="flex flex-col flex-1 h-full w-full bg-stone-50 dark:bg-stone-950 overflow-hidden transition-colors">
+        <main className="flex flex-col flex-1 h-full w-full bg-zinc-50 dark:bg-[#0b0b0c] overflow-hidden transition-colors">
           {/* Messages list */}
           <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3">
             <div className="max-w-3xl mx-auto space-y-3">
@@ -305,8 +305,8 @@ export default function App() {
               ))}
 
               {isLoading && (
-                <div className="flex items-center gap-2 text-stone-600 dark:text-stone-400 text-xs py-2 px-3">
-                  <div className="w-2 h-2 rounded-full bg-stone-700 dark:bg-stone-300 animate-pulse" />
+                <div className="flex items-center gap-2 text-zinc-600 dark:text-[#9bb7c3] text-xs py-2 px-3">
+                  <div className="w-2 h-2 rounded-full bg-[#d7fe09] animate-pulse" />
                   <span>{activePersona.name} está digitando...</span>
                 </div>
               )}
@@ -328,7 +328,7 @@ export default function App() {
 
         {/* Persona & System Prompt Editor - Mobile Drawer / Slide-Over */}
         {isEditorOpen && (
-          <div className="fixed inset-0 z-50 md:static md:z-auto md:w-1/2 lg:w-2/5 md:border-l border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 flex flex-col animate-in fade-in slide-in-from-right-10 duration-200">
+          <div className="fixed inset-0 z-50 md:static md:z-auto md:w-1/2 lg:w-2/5 md:border-l border-zinc-200 dark:border-white/10 bg-white dark:bg-[#121214] flex flex-col animate-in fade-in slide-in-from-right-10 duration-200">
             <PersonaEditor
               persona={activePersona}
               onUpdatePersona={handleUpdateActivePersona}

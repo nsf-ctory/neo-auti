@@ -87,12 +87,12 @@ export function PersonaEditor({
   return (
     <div
       id="persona-editor-container"
-      className="flex flex-col h-full bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 overflow-hidden shadow-2xl transition-colors"
+      className="flex flex-col h-full bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 overflow-hidden shadow-2xl transition-colors"
     >
       {/* Clean Mobile Header */}
-      <div className="px-4 py-3 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between gap-3 bg-stone-50/70 dark:bg-stone-900/90 shrink-0">
+      <div className="px-4 py-3 border-b border-zinc-200 dark:border-white/10 flex items-center justify-between gap-3 bg-zinc-50/70 dark:bg-[#0b0b0c]/90 shrink-0">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center overflow-hidden shrink-0 border border-stone-200 dark:border-stone-700">
+          <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0 border border-zinc-200 dark:border-white/10">
             {persona.avatar && (persona.avatar.startsWith('/') || persona.avatar.startsWith('http')) ? (
               <img
                 src={persona.avatar}
@@ -109,10 +109,10 @@ export function PersonaEditor({
               type="text"
               value={persona.name}
               onChange={(e) => updateField('name', e.target.value)}
-              className="text-sm font-semibold text-stone-900 dark:text-stone-100 bg-transparent border-0 p-0 focus:outline-none focus:ring-0 truncate"
+              className="text-sm font-semibold text-zinc-900 dark:text-white bg-transparent border-0 p-0 focus:outline-none focus:ring-0 truncate"
               placeholder="Nome da Persona"
             />
-            <p className="text-[11px] text-stone-600 dark:text-stone-400 truncate">
+            <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3] truncate">
               {persona.archetype || 'Personalizada'}
             </p>
           </div>
@@ -121,7 +121,7 @@ export function PersonaEditor({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-stone-100 active:scale-95 rounded-full transition-transform"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white active:scale-95 rounded-full transition-transform"
           title="Fechar"
         >
           <X className="w-5 h-5" />
@@ -129,14 +129,14 @@ export function PersonaEditor({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-stone-200 dark:border-stone-800 px-3 bg-white dark:bg-stone-900 gap-1 shrink-0 overflow-x-auto">
+      <div className="flex border-b border-zinc-200 dark:border-white/10 px-3 bg-white dark:bg-[#121214] gap-1 shrink-0 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('prompt')}
           className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'prompt'
-              ? 'border-stone-900 dark:border-stone-100 text-stone-950 dark:text-stone-100'
-              : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'border-zinc-900 dark:border-[#fe2c55] text-zinc-950 dark:text-white'
+              : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -148,8 +148,8 @@ export function PersonaEditor({
           onClick={() => setActiveTab('humanization')}
           className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'humanization'
-              ? 'border-stone-900 dark:border-stone-100 text-stone-950 dark:text-stone-100'
-              : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'border-zinc-900 dark:border-[#00f2fe] text-zinc-950 dark:text-white'
+              : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
           }`}
         >
           <Sliders className="w-3.5 h-3.5" />
@@ -161,8 +161,8 @@ export function PersonaEditor({
           onClick={() => setActiveTab('settings')}
           className={`min-h-[44px] px-3 py-2 text-xs font-semibold border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === 'settings'
-              ? 'border-stone-900 dark:border-stone-100 text-stone-950 dark:text-stone-100'
-              : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'border-zinc-900 dark:border-[#d7fe09] text-zinc-950 dark:text-white'
+              : 'border-transparent text-zinc-600 dark:text-[#9bb7c3] hover:text-zinc-900 dark:hover:text-zinc-200'
           }`}
         >
           <Cpu className="w-3.5 h-3.5" />
@@ -176,61 +176,61 @@ export function PersonaEditor({
         {activeTab === 'prompt' && (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100 mb-1">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white mb-1">
                 Seu System Prompt Autoral
               </label>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400 mb-2 leading-relaxed">
+              <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3] mb-2 leading-relaxed">
                 Cole aqui as instruções originais da sua persona. Suas regras fundamentais são rigorosamente preservadas.
               </p>
               <textarea
                 rows={8}
                 value={persona.systemPrompt}
                 onChange={(e) => updateField('systemPrompt', e.target.value)}
-                className="w-full text-xs sm:text-sm font-mono p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 rounded-xl focus:bg-white focus:dark:bg-stone-950 focus:border-stone-400 dark:focus:border-stone-600 focus:outline-none leading-relaxed transition-all shadow-2xs"
+                className="w-full text-xs sm:text-sm font-mono p-3 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white focus:dark:bg-[#050505] focus:border-zinc-400 dark:focus:border-[#fe2c55]/40 focus:outline-none leading-relaxed transition-all shadow-2xs"
                 placeholder="Ex: Você é um assistente de negociação focado em clareza..."
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100 mb-1">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white mb-1">
                 Frase de Apresentação / Tagline
               </label>
               <input
                 type="text"
                 value={persona.tagline}
                 onChange={(e) => updateField('tagline', e.target.value)}
-                className="w-full text-xs p-2.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 rounded-xl focus:bg-white focus:dark:bg-stone-950 focus:border-stone-400 dark:focus:border-stone-600 focus:outline-none transition-all shadow-2xs"
+                className="w-full text-xs p-2.5 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white focus:dark:bg-[#050505] focus:border-zinc-400 dark:focus:border-[#fe2c55]/40 focus:outline-none transition-all shadow-2xs"
                 placeholder="Ex: Especialista em escuta empática e acolhimento"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100 mb-1">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white mb-1">
                 História de Fundo / Memórias
               </label>
               <textarea
                 rows={3}
                 value={persona.humanizationNotes || ''}
                 onChange={(e) => updateField('humanizationNotes', e.target.value)}
-                className="w-full text-xs p-2.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 rounded-xl focus:bg-white focus:dark:bg-stone-950 focus:border-stone-400 dark:focus:border-stone-600 focus:outline-none leading-relaxed transition-all shadow-2xs"
+                className="w-full text-xs p-2.5 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white focus:dark:bg-[#050505] focus:border-zinc-400 dark:focus:border-[#fe2c55]/40 focus:outline-none leading-relaxed transition-all shadow-2xs"
                 placeholder="Ex: Vive em São Paulo, adora café coado, tem interesse em música e literatura brasileira..."
               />
             </div>
 
             {/* Live Prompt Preview / Copy */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl space-y-2">
+            <div className="p-3 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 rounded-xl space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-stone-700 dark:text-stone-300">Prompt Sintetizado Final</span>
+                <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Prompt Sintetizado Final</span>
                 <button
                   type="button"
                   onClick={handleCopySynthesized}
-                  className="text-xs text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-stone-100 font-medium flex items-center gap-1"
+                  className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white font-medium flex items-center gap-1"
                 >
-                  {copiedPrompt ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedPrompt ? <Check className="w-3.5 h-3.5 text-[#00f2fe]" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedPrompt ? 'Copiado!' : 'Copiar'}</span>
                 </button>
               </div>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400 line-clamp-3 font-mono">
+              <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3] line-clamp-3 font-mono">
                 {synthesized}
               </p>
             </div>
@@ -242,7 +242,7 @@ export function PersonaEditor({
           <div className="space-y-5">
             {/* Voz Falada (TTS / Live) */}
             <div>
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100 mb-1">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white mb-1">
                 Voz da Persona (Gemini Live & TTS)
               </label>
               <div className="grid grid-cols-2 gap-2 pt-1">
@@ -258,8 +258,8 @@ export function PersonaEditor({
                     onClick={() => updateHumanization('speakingVoice', v.name as any)}
                     className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
                       persona.humanization.speakingVoice === v.name
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 font-medium'
-                        : 'border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-950 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-850'
+                        ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
+                        : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     }`}
                   >
                     {v.label}
@@ -269,10 +269,10 @@ export function PersonaEditor({
             </div>
 
             {/* Sliders: Warmth */}
-            <div className="space-y-1.5 bg-stone-50 dark:bg-stone-950 p-3 rounded-xl border border-stone-200/80 dark:border-stone-800/80">
+            <div className="space-y-1.5 bg-zinc-50 dark:bg-[#0b0b0c] p-3 rounded-xl border border-zinc-200/80 dark:border-white/10">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-stone-900 dark:text-stone-100">Calidez & Empatia</span>
-                <span className="font-mono text-stone-600 dark:text-stone-400">{persona.humanization.warmth}%</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">Calidez & Empatia</span>
+                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">{persona.humanization.warmth}%</span>
               </div>
               <input
                 type="range"
@@ -280,19 +280,19 @@ export function PersonaEditor({
                 max="100"
                 value={persona.humanization.warmth}
                 onChange={(e) => updateHumanization('warmth', Number(e.target.value))}
-                className="w-full accent-stone-900 dark:accent-stone-100"
+                className="w-full accent-[#fe2c55]"
               />
-              <div className="flex justify-between text-[10px] text-stone-600 dark:text-stone-400">
+              <div className="flex justify-between text-[10px] text-zinc-600 dark:text-[#9bb7c3]">
                 <span>Neutro / Objetivo</span>
                 <span>Caloroso / Afetivo</span>
               </div>
             </div>
 
             {/* Sliders: Humor */}
-            <div className="space-y-1.5 bg-stone-50 dark:bg-stone-950 p-3 rounded-xl border border-stone-200/80 dark:border-stone-800/80">
+            <div className="space-y-1.5 bg-zinc-50 dark:bg-[#0b0b0c] p-3 rounded-xl border border-zinc-200/80 dark:border-white/10">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-stone-900 dark:text-stone-100">Humor & Sagacidade</span>
-                <span className="font-mono text-stone-600 dark:text-stone-400">{persona.humanization.humor}%</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">Humor & Sagacidade</span>
+                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">{persona.humanization.humor}%</span>
               </div>
               <input
                 type="range"
@@ -300,9 +300,9 @@ export function PersonaEditor({
                 max="100"
                 value={persona.humanization.humor}
                 onChange={(e) => updateHumanization('humor', Number(e.target.value))}
-                className="w-full accent-stone-900 dark:accent-stone-100"
+                className="w-full accent-[#fe2c55]"
               />
-              <div className="flex justify-between text-[10px] text-stone-600 dark:text-stone-400">
+              <div className="flex justify-between text-[10px] text-zinc-600 dark:text-[#9bb7c3]">
                 <span>Literal / Sério</span>
                 <span>Espirituoso / Irônico</span>
               </div>
@@ -310,7 +310,7 @@ export function PersonaEditor({
 
             {/* Pacing */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white">
                 Cadência da Fala (Pacing)
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -326,8 +326,8 @@ export function PersonaEditor({
                     onClick={() => updateHumanization('pacing', p.id as any)}
                     className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
                       persona.humanization.pacing === p.id
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 font-medium'
-                        : 'border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-950 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-850'
+                        ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
+                        : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     }`}
                   >
                     {p.label}
@@ -338,7 +338,7 @@ export function PersonaEditor({
 
             {/* Formality */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white">
                 Registro de Linguagem
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -354,8 +354,8 @@ export function PersonaEditor({
                     onClick={() => updateHumanization('formality', f.id as any)}
                     className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-[44px] ${
                       persona.humanization.formality === f.id
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 font-medium'
-                        : 'border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-950 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-850'
+                        ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
+                        : 'border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#050505] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     }`}
                   >
                     {f.label}
@@ -366,7 +366,7 @@ export function PersonaEditor({
 
             {/* Quirks Manager */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100">
+              <label className="block text-xs font-semibold text-zinc-900 dark:text-white">
                 Expressões e Cacoetes Verbais
               </label>
               <div className="flex gap-2">
@@ -376,12 +376,12 @@ export function PersonaEditor({
                   onChange={(e) => setNewQuirk(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addQuirk())}
                   placeholder="Ex: 'veja bem', 'saca só'..."
-                  className="flex-1 text-xs p-2 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none"
+                  className="flex-1 text-xs p-2 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white dark:focus:bg-[#050505] focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={addQuirk}
-                  className="min-h-[40px] px-3 bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white text-white dark:text-stone-900 text-xs font-medium rounded-xl transition-colors flex items-center gap-1"
+                  className="min-h-[40px] px-3 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-900 text-xs font-medium rounded-xl transition-colors flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Adicionar</span>
@@ -392,13 +392,13 @@ export function PersonaEditor({
                 {(persona.humanization.quirks || []).map((quirk) => (
                   <span
                     key={quirk}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs text-stone-800 dark:text-stone-200"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-800 dark:text-zinc-200"
                   >
                     <span>"{quirk}"</span>
                     <button
                       type="button"
                       onClick={() => removeQuirk(quirk)}
-                      className="text-stone-600 dark:text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+                      className="text-zinc-600 dark:text-zinc-400 hover:text-[#fe2c55] dark:hover:text-[#fe2c55] transition-colors"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
@@ -415,13 +415,13 @@ export function PersonaEditor({
             {/* Model Selector */}
             {onSelectModel && (
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-stone-900 dark:text-stone-100">
+                <label className="block text-xs font-semibold text-zinc-900 dark:text-white">
                   Modelo Gemini Principal
                 </label>
                 <select
                   value={selectedModel}
                   onChange={(e) => onSelectModel(e.target.value)}
-                  className="w-full text-xs font-medium bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 rounded-xl p-2.5 focus:bg-white dark:focus:bg-stone-900 focus:outline-none"
+                  className="w-full text-xs font-medium bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200 rounded-xl p-2.5 focus:bg-white dark:focus:bg-[#050505] focus:outline-none"
                 >
                   <option value="gemini-3.8-flash">Gemini 3.8 Flash (Padrão e Eficiente)</option>
                   <option value="gemini-3.5-flash">Gemini 3.5 Flash (Rápido)</option>
@@ -433,13 +433,13 @@ export function PersonaEditor({
 
             {/* Thinking Mode Toggle */}
             {onToggleThinking && (
-              <div className="flex items-center justify-between p-3.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl">
+              <div className="flex items-center justify-between p-3.5 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 rounded-xl">
                 <div className="space-y-0.5 pr-2">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-900 dark:text-stone-100">
-                    <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-900 dark:text-white">
+                    <Brain className="w-4 h-4 text-[#d7fe09]" />
                     <span>Raciocínio Profundo (Thinking Mode)</span>
                   </div>
-                  <p className="text-[11px] text-stone-600 dark:text-stone-400">
+                  <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3]">
                     Usa Gemini 3.1 Pro com nível alto de reflexão antes de emitir a resposta.
                   </p>
                 </div>
@@ -447,20 +447,20 @@ export function PersonaEditor({
                   type="checkbox"
                   checked={isThinkingMode}
                   onChange={onToggleThinking}
-                  className="w-5 h-5 accent-stone-900 dark:accent-stone-100 rounded cursor-pointer"
+                  className="w-5 h-5 accent-[#d7fe09] rounded cursor-pointer"
                 />
               </div>
             )}
 
             {/* Google Search Grounding */}
             {onToggleSearchGrounding && (
-              <div className="flex items-center justify-between p-3.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl">
+              <div className="flex items-center justify-between p-3.5 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 rounded-xl">
                 <div className="space-y-0.5 pr-2">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-900 dark:text-stone-100">
-                    <Search className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-900 dark:text-white">
+                    <Search className="w-4 h-4 text-[#00f2fe]" />
                     <span>Pesquisa Google (Google Search)</span>
                   </div>
-                  <p className="text-[11px] text-stone-600 dark:text-stone-400">
+                  <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3]">
                     Conecta respostas a fatos em tempo real e citações da web.
                   </p>
                 </div>
@@ -468,7 +468,7 @@ export function PersonaEditor({
                   type="checkbox"
                   checked={isSearchGrounding}
                   onChange={onToggleSearchGrounding}
-                  className="w-5 h-5 accent-stone-900 dark:accent-stone-100 rounded cursor-pointer"
+                  className="w-5 h-5 accent-[#00f2fe] rounded cursor-pointer"
                 />
               </div>
             )}
@@ -477,7 +477,7 @@ export function PersonaEditor({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-3 bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white active:scale-95 text-white dark:text-stone-900 font-medium text-xs rounded-xl shadow-xs transition-all"
+                className="w-full py-3 bg-zinc-900 dark:bg-[#fe2c55] hover:bg-zinc-800 dark:hover:bg-[#e0264b] active:scale-95 text-white font-medium text-xs rounded-xl shadow-xs shadow-[#fe2c55]/20 transition-all"
               >
                 Concluir e Voltar ao Chat
               </button>

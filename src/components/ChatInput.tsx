@@ -176,24 +176,24 @@ export function ChatInput({
   return (
     <div
       id="chat-input-container"
-      className="p-2.5 sm:p-3.5 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-t border-stone-200/90 dark:border-stone-800/90 shrink-0 transition-colors"
+      className="p-2.5 sm:p-3.5 bg-white/95 dark:bg-[#0b0b0c]/95 backdrop-blur-md border-t border-zinc-200/90 dark:border-white/10 shrink-0 transition-colors"
     >
       <div className="max-w-3xl mx-auto space-y-2">
         {/* Attachment preview if an image was selected */}
         {attachment && (
-          <div className="flex items-center gap-2 p-1.5 bg-stone-100 dark:bg-stone-800 rounded-xl w-fit border border-stone-200 dark:border-stone-700 shadow-2xs">
+          <div className="flex items-center gap-2 p-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl w-fit border border-zinc-200 dark:border-zinc-700 shadow-2xs">
             <img
               src={attachment.previewUrl}
               alt="Anexo"
-              className="w-11 h-11 object-cover rounded-lg border border-stone-300 dark:border-stone-600"
+              className="w-11 h-11 object-cover rounded-lg border border-zinc-300 dark:border-zinc-600"
             />
-            <span className="text-xs text-stone-700 dark:text-stone-300 max-w-[180px] truncate">
+            <span className="text-xs text-zinc-700 dark:text-zinc-300 max-w-[180px] truncate">
               {attachment.name}
             </span>
             <button
               type="button"
               onClick={() => setAttachment(null)}
-              className="min-h-[36px] min-w-[36px] flex items-center justify-center text-stone-500 hover:text-rose-600 dark:text-stone-400 dark:hover:text-rose-400 rounded-full transition-colors"
+              className="min-h-[36px] min-w-[36px] flex items-center justify-center text-zinc-500 hover:text-[#fe2c55] dark:text-zinc-400 dark:hover:text-[#fe2c55] rounded-full transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -202,9 +202,9 @@ export function ChatInput({
 
         {/* Recording Status Bar */}
         {isRecording && (
-          <div className="flex items-center justify-between px-3.5 py-2 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/80 rounded-2xl text-rose-800 dark:text-rose-300 text-xs shadow-2xs">
+          <div className="flex items-center justify-between px-3.5 py-2 bg-[#fe2c55]/10 border border-[#fe2c55]/30 rounded-2xl text-[#fe2c55] dark:text-[#fe2c55] text-xs shadow-2xs">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#fe2c55] animate-ping" />
               <span className="font-semibold">Gravando áudio...</span>
               <span className="font-mono">
                 {Math.floor(recordingSeconds / 60)}:{(recordingSeconds % 60).toString().padStart(2, '0')}
@@ -214,14 +214,14 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={cancelRecording}
-                className="min-h-[36px] px-2.5 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 font-medium"
+                className="min-h-[36px] px-2.5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 font-medium"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={stopRecording}
-                className="min-h-[36px] px-3 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-xl flex items-center gap-1.5 shadow-xs"
+                className="min-h-[36px] px-3 bg-[#fe2c55] hover:bg-[#e0264b] text-white font-medium rounded-xl flex items-center gap-1.5 shadow-xs"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
                 Pronto
@@ -232,14 +232,14 @@ export function ChatInput({
 
         {/* Transcribing loader */}
         {isTranscribing && (
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-stone-700 dark:text-stone-300 text-xs">
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-stone-900 dark:text-stone-100" />
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-700 dark:text-zinc-300 text-xs">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-zinc-900 dark:text-zinc-100" />
             <span>Transcrevendo áudio...</span>
           </div>
         )}
 
         {/* Streamlined Mobile Input Bar */}
-        <div className="flex items-end gap-1.5 bg-stone-100/90 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-2xl p-1.5 focus-within:border-stone-400 focus-within:dark:border-stone-500 focus-within:bg-white focus-within:dark:bg-stone-800 transition-all shadow-2xs">
+        <div className="flex items-end gap-1.5 bg-zinc-100/90 dark:bg-zinc-900/80 border border-zinc-200 dark:border-white/10 rounded-2xl p-1.5 focus-within:border-zinc-400 focus-within:dark:border-[#fe2c55]/50 focus-within:bg-white focus-within:dark:bg-zinc-900 transition-all shadow-2xs">
           {/* File/Image Upload (44px touch target) */}
           <input
             type="file"
@@ -254,7 +254,7 @@ export function ChatInput({
             onClick={() => fileInputRef.current?.click()}
             title="Anexar imagem"
             disabled={isLoading || isRecording}
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 active:scale-95 rounded-xl transition-all"
+            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 active:scale-95 rounded-xl transition-all"
           >
             <ImageIcon className="w-5 h-5" />
           </button>
@@ -269,7 +269,7 @@ export function ChatInput({
             onKeyDown={handleKeyDown}
             placeholder={`Conversar com ${personaName}...`}
             disabled={isLoading || isRecording}
-            className="flex-1 min-h-[40px] max-h-32 bg-transparent border-0 resize-none py-2 px-1 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-500 dark:placeholder:text-stone-500 focus:outline-none leading-relaxed"
+            className="flex-1 min-h-[40px] max-h-32 bg-transparent border-0 resize-none py-2 px-1 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 focus:outline-none leading-relaxed"
           />
 
           {/* Right Action: Send when text exists, or Mic / Live Call when empty */}
@@ -280,7 +280,7 @@ export function ChatInput({
               onClick={handleSend}
               disabled={isLoading || isRecording}
               title="Enviar mensagem"
-              className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white dark:text-stone-900 bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white active:scale-95 rounded-xl shadow-xs transition-all shrink-0"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white dark:text-zinc-900 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white active:scale-95 rounded-xl shadow-xs transition-all shrink-0"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -297,7 +297,7 @@ export function ChatInput({
                 onClick={startRecording}
                 disabled={isLoading || isTranscribing}
                 title="Gravar áudio para transcrever"
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 active:scale-95 rounded-xl transition-all"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 active:scale-95 rounded-xl transition-all"
               >
                 <Mic className="w-5 h-5" />
               </button>
@@ -309,7 +309,7 @@ export function ChatInput({
                 onClick={onStartLiveCall}
                 disabled={isLoading}
                 title="Chamada de voz ao vivo"
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 active:scale-95 rounded-xl transition-all"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-[#fe2c55] hover:text-[#e0264b] dark:text-[#fe2c55] dark:hover:text-[#ff4e71] active:scale-95 rounded-xl transition-all"
               >
                 <Radio className="w-5 h-5 animate-pulse" />
               </button>
