@@ -299,7 +299,27 @@ export default function App() {
         <main className="flex flex-col flex-1 h-full w-full bg-zinc-50 dark:bg-[#0b0b0c] overflow-hidden transition-colors">
           {/* Messages list */}
           <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3">
-            <div className="max-w-3xl mx-auto space-y-3">
+            <div className="max-w-3xl mx-auto space-y-3 min-h-[50vh] flex flex-col justify-center">
+              {messages.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-10 px-4 text-center space-y-4 select-none my-auto">
+                  <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg p-2 overflow-hidden">
+                    <img
+                      src={activePersona.avatar}
+                      alt={activePersona.name}
+                      className="w-full h-full object-contain rounded-full"
+                    />
+                  </div>
+                  <div className="space-y-1.5 max-w-sm">
+                    <h2 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-white">
+                      Atendimento por Voz neøflow
+                    </h2>
+                    <p className="text-xs text-zinc-600 dark:text-[#9bb7c3] leading-relaxed">
+                      Converse diretamente com o <strong>{activePersona.name}</strong> gravando uma mensagem de áudio ou inicie uma <strong>Chamada de Voz ao Vivo</strong> em tempo real.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {messages.map((msg: Message) => (
                 <ChatMessage key={msg.id} message={msg} persona={activePersona} />
               ))}
@@ -307,7 +327,7 @@ export default function App() {
               {isLoading && (
                 <div className="flex items-center gap-2 text-zinc-600 dark:text-[#9bb7c3] text-xs py-2 px-3">
                   <div className="w-2 h-2 rounded-full bg-[#d7fe09] animate-pulse" />
-                  <span>{activePersona.name} está digitando...</span>
+                  <span>{activePersona.name} está respondendo...</span>
                 </div>
               )}
 
