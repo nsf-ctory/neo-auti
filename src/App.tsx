@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Phone, RotateCcw } from "lucide-react";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
 import { Header } from "./components/Header";
@@ -124,14 +125,7 @@ export default function App() {
   };
 
   const handleClearChat = () => {
-    setMessages([
-      {
-        id: `welcome-${Date.now()}`,
-        role: "assistant",
-        content: `Histórico reiniciado. O que gostaria de conversar agora?`,
-        timestamp: Date.now(),
-      },
-    ]);
+    setMessages([]);
   };
 
   const handleStartLiveCall = () => {
@@ -283,15 +277,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-dvh w-full bg-zinc-50 dark:bg-[#0b0b0c] text-zinc-900 dark:text-zinc-100 font-sans antialiased select-auto overflow-hidden transition-colors">
       {/* Sleek Mobile-First Header */}
-      <Header
-        activePersona={activePersona}
-        isEditorOpen={isEditorOpen}
-        onToggleEditor={() => setIsEditorOpen((prev: any) => !prev)}
-        onClearChat={handleClearChat}
-        onStartLiveCall={handleStartLiveCall}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-      />
+      <Header activePersona={activePersona} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex relative overflow-hidden">
@@ -301,21 +287,49 @@ export default function App() {
           <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3">
             <div className="max-w-3xl mx-auto space-y-3 min-h-[50vh] flex flex-col justify-center">
               {messages.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-10 px-4 text-center space-y-4 select-none my-auto">
-                  <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg p-2 overflow-hidden">
-                    <img
-                      src={activePersona.avatar}
-                      alt={activePersona.name}
-                      className="w-full h-full object-contain rounded-full"
-                    />
+                <div className="flex flex-col items-center justify-center py-6 sm:py-10 px-4 text-center select-none my-auto animate-in fade-in zoom-in-95 duration-300">
+                  {/* Halo Visualizer Rings (Siri / Gemini Live pulse) */}
+                  <div className="relative flex items-center justify-center mb-6">
+                    <div className="absolute w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#fe2c55]/10 animate-ping opacity-25" />
+                    <div className="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-[#fe2c55]/25 via-[#00f2fe]/20 to-[#d7fe09]/15 blur-xl animate-pulse" />
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-zinc-900 border-2 border-white/10 shadow-[0_0_30px_rgba(254,44,85,0.2)] p-2.5 overflow-hidden flex items-center justify-center ring-2 ring-[#00f2fe]/30">
+                      <img
+                        src={activePersona.avatar}
+                        alt={activePersona.name}
+                        className="w-full h-full object-contain rounded-full drop-shadow-[0_0_12px_rgba(0,242,254,0.3)]"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-1.5 max-w-sm">
-                    <h2 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-white">
-                      Atendimento por Voz neøflow
+
+                  {/* Hero Identity & Description */}
+                  <div className="space-y-2 max-w-sm">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono tracking-widest text-[#00f2fe] uppercase">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00f2fe] animate-pulse" />
+                      Voz Bidirecional Nativa
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                      Atendimento &gt;_ neøtiko
                     </h2>
-                    <p className="text-xs text-zinc-600 dark:text-[#9bb7c3] leading-relaxed">
-                      Converse diretamente com o <strong>{activePersona.name}</strong> gravando uma mensagem de áudio ou inicie uma <strong>Chamada de Voz ao Vivo</strong> em tempo real.
+                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-[#9bb7c3] leading-relaxed">
+                      Triagem e assessoria oficial TikTok Shop & Creators. Inicie uma chamada ao vivo agora ou envie mensagens gravadas de áudio.
                     </p>
+                  </div>
+
+                  {/* Primary Call Action Button */}
+                  <div className="pt-6 flex flex-col items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={handleStartLiveCall}
+                      className="group relative flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-[#fe2c55] hover:bg-[#ff3b5c] text-white font-medium text-sm sm:text-base shadow-[0_8px_30px_rgba(254,44,85,0.35)] hover:shadow-[0_10px_35px_rgba(254,44,85,0.5)] transition-all duration-200 active:scale-95 cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Phone className="w-4 h-4 fill-current text-white animate-pulse" />
+                      </div>
+                      <span className="tracking-tight">Iniciar Chamada ao Vivo</span>
+                    </button>
+                    <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
+                      ou use o microfone abaixo para gravar áudio
+                    </span>
                   </div>
                 </div>
               )}
@@ -328,6 +342,21 @@ export default function App() {
                 <div className="flex items-center gap-2 text-zinc-600 dark:text-[#9bb7c3] text-xs py-2 px-3">
                   <div className="w-2 h-2 rounded-full bg-[#d7fe09] animate-pulse" />
                   <span>{activePersona.name} está respondendo...</span>
+                </div>
+              )}
+
+              {/* Discreet Conversation Reset Button */}
+              {messages.length > 0 && !isLoading && (
+                <div className="pt-3 pb-1 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={handleClearChat}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-zinc-500 hover:text-[#fe2c55] hover:bg-zinc-100 dark:hover:bg-white/[0.05] transition-all cursor-pointer"
+                    title="Reiniciar atendimento e limpar histórico"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reiniciar conversa</span>
+                  </button>
                 </div>
               )}
 
