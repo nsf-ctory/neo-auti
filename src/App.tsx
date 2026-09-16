@@ -73,12 +73,25 @@ export default function App() {
     }
   }, [personas, activePersonaId]);
 
+declare global {
+  interface Window {
+    ttq?: {
+      track: (event: string, params?: Record<string, unknown>) => void;
+      page: () => void;
+    };
+  }
+}
+
   // Check if ?config=true or ?edit=true in URL to allow developer access without exposing UI button
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
       if (params.get("config") === "true" || params.get("edit") === "true") {
         setIsEditorOpen(true);
+      }
+      const ttclid = params.get("ttclid");
+      if (ttclid) {
+        sessionStorage.setItem("neo_ttclid", ttclid);
       }
     } catch (e) {
       // ignore
@@ -121,12 +134,27 @@ export default function App() {
     ]);
   };
 
+  const handleStartLiveCall = () => {
+    try {
+      window.ttq?.track("Contact", { content_name: "live_voice_call" });
+    } catch (e) {
+      // ignore
+    }
+    setIsLiveModalOpen(true);
+  };
+
   const handleSendMessage = async (
     text: string,
     image?: ChatMessageAttachment,
     options?: { isThinking?: boolean; searchGrounding?: boolean },
   ) => {
     if (!text && !image) return;
+
+    try {
+      window.ttq?.track("Contact", { content_name: "chat_message_sent" });
+    } catch (e) {
+      // ignore
+    }
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -260,7 +288,7 @@ export default function App() {
         isEditorOpen={isEditorOpen}
         onToggleEditor={() => setIsEditorOpen((prev: any) => !prev)}
         onClearChat={handleClearChat}
-        onStartLiveCall={() => setIsLiveModalOpen(true)}
+        onStartLiveCall={handleStartLiveCall}
         theme={theme}
         onToggleTheme={handleToggleTheme}
       />
@@ -293,7 +321,7 @@ export default function App() {
             isLoading={isLoading}
             isThinkingMode={isThinkingMode}
             isSearchGrounding={isSearchGrounding}
-            onStartLiveCall={() => setIsLiveModalOpen(true)}
+            onStartLiveCall={handleStartLiveCall}
             personaName={activePersona.name}
           />
         </main>
