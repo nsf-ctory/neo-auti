@@ -15,7 +15,7 @@ WHITE   := \033[1;37m
 RESET   := \033[0m
 
 .DEFAULT_GOAL := help
-.PHONY: help check-node install repair clean dev build start preview lint doctor verify
+.PHONY: help check-node install repair clean dev build start preview lint doctor verify deploy
 
 # ─── HELP ────────────────────────────────────────────────────────────────────
 
@@ -136,3 +136,10 @@ doctor: ## Diagnóstico de ambiente, variáveis e dependências
 
 verify: lint build ## Validação completa da esteira CI/CD local (typecheck + build)
 	@printf "$(GREEN)  ✓ Todas as verificações de qualidade foram aprovadas com sucesso!$(RESET)\n"
+
+deploy: verify ## Executa build e envia deploy para produção no Railway
+	@printf "$(CYAN)╭──────────────────────────────────────────╮$(RESET)\n"
+	@printf "$(CYAN)│$(RESET)  $(WHITE)🚀 DEPLOY (RAILWAY)$(RESET)%-23s$(CYAN)│$(RESET)\n" ""
+	@printf "$(CYAN)╰──────────────────────────────────────────╯$(RESET)\n"
+	@railway up --service neo-triage-agent -e production -d
+	@printf "$(GREEN)  ✓ Deploy disparado com sucesso para Railway (neo-triage-agent)!$(RESET)\n"
