@@ -310,7 +310,7 @@ export default function App() {
 
                   {/* Hero Identity & Description */}
                   <div className="space-y-2 max-w-sm">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono tracking-widest text-[#00f2fe] uppercase">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/4 border border-white/10 text-[10px] font-mono tracking-widest text-[#00f2fe] uppercase">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#00f2fe] animate-pulse" />
                       Voz Bidirecional Nativa
                     </div>

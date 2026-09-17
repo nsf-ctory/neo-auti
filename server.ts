@@ -73,7 +73,32 @@ async function startServer() {
   const PORT = Number(process.env.PORT) || 3000;
 
   app.use(express.json({ limit: '50mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+  // Security Headers (Grade A+ on SecurityHeaders.com)
+  app.use((_req, res, next) => {
+    res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=(), payment=(), usb=()');
+    res.setHeader(
+      'Content-Security-Policy',
+      [
+        "default-src 'self' https://triage.neotiktok.com https://neotiktok.com https://*.neotiktok.com",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.tiktok.com https://*.tiktok.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src 'self' https://fonts.gstatic.com data:",
+        "img-src 'self' data: blob: https://triage.neotiktok.com https://neotiktok.com https://*.neotiktok.com https://cdn.neoflowoff.agency https://*.cloudflarestorage.com https://*.tiktokcdn.com",
+        "media-src 'self' data: blob: https://cdn.neoflowoff.agency https://*.cloudflarestorage.com",
+        "connect-src 'self' https://triage.neotiktok.com wss://triage.neotiktok.com https://api.neotiktok.com https://neotiktok.com https://*.neotiktok.com https://generativelanguage.googleapis.com https://cdn.neoflowoff.agency https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com",
+        "frame-src 'self' https://neotiktok.com https://*.tiktok.com",
+        "frame-ancestors 'self' https://neotiktok.com https://*.neotiktok.com https://*.tiktok.com https://*.tiktokv.com https://*.musical.ly",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+      ].join('; ')
+    );
+    next();
+  });
 
   // Health check
   app.get('/api/health', (_req, res) => {
