@@ -1,19 +1,18 @@
-import { useState } from 'react';
-import { Persona, HumanizationConfig } from '../types';
-import { synthesizeSystemInstruction } from '../utils/promptSynthesizer';
 import {
-  Sparkles,
-  Sliders,
-  FileText,
-  Copy,
-  Check,
-  X,
-  Plus,
-  Trash2,
   Brain,
-  Search,
+  Check,
+  Copy,
   Cpu,
+  FileText,
+  Plus,
+  Search,
+  Sliders,
+  Trash2,
+  X,
 } from 'lucide-react';
+import { useState } from 'react';
+import { HumanizationConfig, Persona } from '../types';
+import { synthesizeSystemInstruction } from '../utils/promptSynthesizer';
 
 interface PersonaEditorProps {
   persona: Persona;
@@ -38,7 +37,9 @@ export function PersonaEditor({
   isSearchGrounding = false,
   onToggleSearchGrounding,
 }: PersonaEditorProps) {
-  const [activeTab, setActiveTab] = useState<'prompt' | 'humanization' | 'settings'>('prompt');
+  const [activeTab, setActiveTab] = useState<
+    'prompt' | 'humanization' | 'settings'
+  >('prompt');
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [newQuirk, setNewQuirk] = useState('');
 
@@ -93,7 +94,9 @@ export function PersonaEditor({
       <div className="px-4 py-3 border-b border-zinc-200 dark:border-white/10 flex items-center justify-between gap-3 bg-zinc-50/70 dark:bg-[#0b0b0c]/90 shrink-0">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0 border border-zinc-200 dark:border-white/10">
-            {persona.avatar && (persona.avatar.startsWith('/') || persona.avatar.startsWith('http')) ? (
+            {persona.avatar &&
+            (persona.avatar.startsWith('/') ||
+              persona.avatar.startsWith('http')) ? (
               <img
                 src={persona.avatar}
                 alt={persona.name}
@@ -101,7 +104,9 @@ export function PersonaEditor({
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <span className="text-xl select-none">{persona.avatar || '◈'}</span>
+              <span className="text-xl select-none">
+                {persona.avatar || '◈'}
+              </span>
             )}
           </div>
           <div className="min-w-0">
@@ -180,7 +185,8 @@ export function PersonaEditor({
                 Seu System Prompt Autoral
               </label>
               <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3] mb-2 leading-relaxed">
-                Cole aqui as instruções originais da sua persona. Suas regras fundamentais são rigorosamente preservadas.
+                Cole aqui as instruções originais da sua persona. Suas regras
+                fundamentais são rigorosamente preservadas.
               </p>
               <textarea
                 rows={8}
@@ -211,7 +217,9 @@ export function PersonaEditor({
               <textarea
                 rows={3}
                 value={persona.humanizationNotes || ''}
-                onChange={(e) => updateField('humanizationNotes', e.target.value)}
+                onChange={(e) =>
+                  updateField('humanizationNotes', e.target.value)
+                }
                 className="w-full text-xs p-2.5 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white focus:dark:bg-[#050505] focus:border-zinc-400 dark:focus:border-[#fe2c55]/40 focus:outline-none leading-relaxed transition-all shadow-2xs"
                 placeholder="Ex: Vive em São Paulo, adora café coado, tem interesse em música e literatura brasileira..."
               />
@@ -220,13 +228,19 @@ export function PersonaEditor({
             {/* Live Prompt Preview / Copy */}
             <div className="p-3 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 rounded-xl space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Prompt Sintetizado Final</span>
+                <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                  Prompt Sintetizado Final
+                </span>
                 <button
                   type="button"
                   onClick={handleCopySynthesized}
                   className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white font-medium flex items-center gap-1"
                 >
-                  {copiedPrompt ? <Check className="w-3.5 h-3.5 text-[#00f2fe]" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedPrompt ? (
+                    <Check className="w-3.5 h-3.5 text-[#00f2fe]" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
                   <span>{copiedPrompt ? 'Copiado!' : 'Copiar'}</span>
                 </button>
               </div>
@@ -255,7 +269,9 @@ export function PersonaEditor({
                   <button
                     key={v.name}
                     type="button"
-                    onClick={() => updateHumanization('speakingVoice', v.name as any)}
+                    onClick={() =>
+                      updateHumanization('speakingVoice', v.name as any)
+                    }
                     className={`p-2.5 rounded-xl border text-xs text-left transition-all min-h-11 ${
                       persona.humanization.speakingVoice === v.name
                         ? 'border-zinc-900 dark:border-[#00f2fe] bg-zinc-900 dark:bg-[#00f2fe]/10 text-white dark:text-[#00f2fe] font-medium'
@@ -271,15 +287,21 @@ export function PersonaEditor({
             {/* Sliders: Warmth */}
             <div className="space-y-1.5 bg-zinc-50 dark:bg-[#0b0b0c] p-3 rounded-xl border border-zinc-200/80 dark:border-white/10">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-zinc-900 dark:text-white">Calidez & Empatia</span>
-                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">{persona.humanization.warmth}%</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
+                  Calidez & Empatia
+                </span>
+                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">
+                  {persona.humanization.warmth}%
+                </span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="100"
                 value={persona.humanization.warmth}
-                onChange={(e) => updateHumanization('warmth', Number(e.target.value))}
+                onChange={(e) =>
+                  updateHumanization('warmth', Number(e.target.value))
+                }
                 className="w-full accent-[#fe2c55]"
               />
               <div className="flex justify-between text-[10px] text-zinc-600 dark:text-[#9bb7c3]">
@@ -291,15 +313,21 @@ export function PersonaEditor({
             {/* Sliders: Humor */}
             <div className="space-y-1.5 bg-zinc-50 dark:bg-[#0b0b0c] p-3 rounded-xl border border-zinc-200/80 dark:border-white/10">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-zinc-900 dark:text-white">Humor & Sagacidade</span>
-                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">{persona.humanization.humor}%</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
+                  Humor & Sagacidade
+                </span>
+                <span className="font-mono text-zinc-600 dark:text-[#9bb7c3]">
+                  {persona.humanization.humor}%
+                </span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="100"
                 value={persona.humanization.humor}
-                onChange={(e) => updateHumanization('humor', Number(e.target.value))}
+                onChange={(e) =>
+                  updateHumanization('humor', Number(e.target.value))
+                }
                 className="w-full accent-[#fe2c55]"
               />
               <div className="flex justify-between text-[10px] text-zinc-600 dark:text-[#9bb7c3]">
@@ -374,14 +402,16 @@ export function PersonaEditor({
                   type="text"
                   value={newQuirk}
                   onChange={(e) => setNewQuirk(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addQuirk())}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && (e.preventDefault(), addQuirk())
+                  }
                   placeholder="Ex: 'veja bem', 'saca só'..."
                   className="flex-1 text-xs p-2 bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-zinc-100 rounded-xl focus:bg-white dark:focus:bg-[#050505] focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={addQuirk}
-                  className="min-h-[40px] px-3 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-900 text-xs font-medium rounded-xl transition-colors flex items-center gap-1"
+                  className="min-h-10 px-3 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-900 text-xs font-medium rounded-xl transition-colors flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Adicionar</span>
@@ -423,10 +453,18 @@ export function PersonaEditor({
                   onChange={(e) => onSelectModel(e.target.value)}
                   className="w-full text-xs font-medium bg-zinc-50 dark:bg-[#050505] border border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200 rounded-xl p-2.5 focus:bg-white dark:focus:bg-[#050505] focus:outline-none"
                 >
-                  <option value="gemini-3.8-flash">Gemini 3.8 Flash (Padrão e Eficiente)</option>
-                  <option value="gemini-3.5-flash">Gemini 3.5 Flash (Rápido)</option>
-                  <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Raciocínio Avançado)</option>
-                  <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash Lite (Ultraleve)</option>
+                  <option value="gemini-3.8-flash">
+                    Gemini 3.8 Flash (Padrão e Eficiente)
+                  </option>
+                  <option value="gemini-3.5-flash">
+                    Gemini 3.5 Flash (Rápido)
+                  </option>
+                  <option value="gemini-3.1-pro-preview">
+                    Gemini 3.1 Pro (Raciocínio Avançado)
+                  </option>
+                  <option value="gemini-3.1-flash-lite">
+                    Gemini 3.1 Flash Lite (Ultraleve)
+                  </option>
                 </select>
               </div>
             )}
@@ -440,7 +478,8 @@ export function PersonaEditor({
                     <span>Raciocínio Profundo (Thinking Mode)</span>
                   </div>
                   <p className="text-[11px] text-zinc-600 dark:text-[#9bb7c3]">
-                    Usa Gemini 3.1 Pro com nível alto de reflexão antes de emitir a resposta.
+                    Usa Gemini 3.1 Pro com nível alto de reflexão antes de
+                    emitir a resposta.
                   </p>
                 </div>
                 <input

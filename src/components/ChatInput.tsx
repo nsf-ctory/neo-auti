@@ -170,7 +170,7 @@ export function ChatInput({
               type="button"
               onClick={startRecording}
               disabled={isLoading}
-              className="flex-1 min-h-[50px] px-4 rounded-2xl bg-zinc-900 dark:bg-[#121214] hover:bg-zinc-800 dark:hover:bg-zinc-900 border border-zinc-300 dark:border-white/15 text-white dark:text-zinc-100 flex items-center justify-center gap-2.5 text-xs sm:text-sm font-medium shadow-sm active:scale-98 transition-all disabled:opacity-50"
+              className="flex-1 min-h-12.5 px-4 rounded-2xl bg-zinc-900 dark:bg-[#121214] hover:bg-zinc-800 dark:hover:bg-zinc-900 border border-zinc-300 dark:border-white/15 text-white dark:text-zinc-100 flex items-center justify-center gap-2.5 text-xs sm:text-sm font-medium shadow-sm active:scale-98 transition-all disabled:opacity-50"
             >
               <span className="w-8 h-8 rounded-full bg-[#00f2fe]/10 border border-[#00f2fe]/30 flex items-center justify-center text-[#00f2fe]">
                 <Mic className="w-4 h-4" />

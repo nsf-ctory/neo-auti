@@ -32,3 +32,9 @@
    - **Git Remoto Soberano:** O remote canônico é o **Gitea** via remotes SSH (`ssh://git@...`), garantindo soberania total contra bloqueios de terceiros.
    - **Deploy Autônomo:** Executado via `Dockerfile` com BuildKit no Railway (`railway up . --path-as-root --service neo-triage-agent -e production`).
    - **Object Storage & Mídia (Cloudflare R2):** Anexos, imagens e mídias de chat utilizam o bucket `neotiktok` via S3 API (`https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com`) com CDN pública em `https://cdn.neoflowoff.agency`.
+
+6. **Padrão Canônico de Estilização (Tailwind CSS v4):**
+   - Obedecer integralmente a `_standards/TAILWIND_V4_STANDARDS.md`.
+   - **Sintaxe v4 obrigatória:** Utilizar `bg-linear-to-*` em vez de `bg-gradient-to-*`.
+   - **Escala métrica nativa vs. Colchetes:** Proibido o uso de classes arbitrárias `[Npx]` para valores existentes na escala do Tailwind (ex: usar `min-h-11` em vez de `min-h-[44px]`, `min-h-9` em vez de `min-h-[36px]`, `min-h-10` para `40px`, `min-h-12.5` para `50px`).
+   - **Paleta Canônica:** `#0b0b0c`, `#050505`, `#121214`, `zinc-*`, `#fe2c55`, `#00f2fe`, `#d7fe09`, `#9bb7c3`. Zero tolerância para cores legadas (`stone-*`, `purple-*`, etc.).
