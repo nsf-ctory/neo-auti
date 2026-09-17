@@ -1,15 +1,14 @@
 import {
   GoogleGenAI,
-  LiveServerMessage,
   Modality,
-  ThinkingLevel,
 } from '@google/genai';
 import dotenv from 'dotenv';
+import { aiLimits, AiBudget, guardAiHttp } from './ai-guard';
 import express from 'express';
 import http from 'http';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { WebSocket, WebSocketServer } from 'ws';
+import { installLiveServer } from './live-server';
 
 dotenv.config();
 
@@ -72,7 +71,8 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(express.json({ limit: '50mb' }));
+  const limits = aiLimits();
+  const aiBudget = new AiBudget(limits);
   // Security Headers (Grade A+ on SecurityHeaders.com)
   app.use((_req, res, next) => {
     res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
@@ -100,6 +100,9 @@ async function startServer() {
     next();
   });
 
+  app.use('/api', guardAiHttp(limits, aiBudget));
+  app.use(express.json({ limit: '2mb' }));
+
   // Health check
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -111,9 +114,6 @@ async function startServer() {
       const {
         messages = [],
         systemInstruction = '',
-        model = 'gemini-3.8-flash',
-        isThinking = false,
-        searchGrounding = false,
         temperature,
       } = req.body;
 
@@ -140,7 +140,7 @@ async function startServer() {
       });
 
       // Config
-      const config: any = {};
+      const config: any = { abortSignal: res.locals.aiSignal, maxOutputTokens: 2048 };
       const baseInstruction =
         systemInstruction && systemInstruction.trim()
           ? systemInstruction.trim()
@@ -150,20 +150,8 @@ async function startServer() {
         config.temperature = temperature;
       }
 
-      // Model determination
-      let selectedModel = model;
-      if (searchGrounding) {
-        // Grounding with Google Search
-        selectedModel =
-          model === 'gemini-3.1-pro-preview'
-            ? 'gemini-3.1-pro-preview'
-            : 'gemini-3.5-flash';
-        config.tools = [{ googleSearch: {} }];
-      } else if (isThinking) {
-        // Thinking mode with high reasoning level
-        selectedModel = 'gemini-3.1-pro-preview';
-        config.thinkingConfig = { thinkingLevel: ThinkingLevel.HIGH };
-      }
+      // Model/cost policy belongs to the server, never to an anonymous caller.
+      const selectedModel = process.env.TRIAGE_CHAT_MODEL || 'gemini-3.8-flash';
 
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
@@ -191,14 +179,15 @@ async function startServer() {
       res.write('data: [DONE]\n\n');
       res.end();
     } catch (err: any) {
-      console.error('Error in /api/chat/stream:', err);
+      console.error(JSON.stringify({ event: 'chat_provider_error' }));
+      if (res.destroyed || res.writableEnded) return;
       if (!res.headersSent) {
         res
           .status(500)
-          .json({ error: err.message || 'Failed to generate chat response' });
+          .json({ error: 'Falha temporária no atendimento.' });
       } else {
         res.write(
-          `data: ${JSON.stringify({ error: err.message || 'Error generating stream' })}\n\n`
+          `data: ${JSON.stringify({ error: 'Falha temporária no atendimento.' })}\n\n`
         );
         res.write('data: [DONE]\n\n');
         res.end();
@@ -224,6 +213,7 @@ async function startServer() {
         model: 'gemini-3.1-flash-tts-preview',
         contents: [{ parts: [{ text: text.trim() }] }],
         config: {
+          abortSignal: res.locals.aiSignal,
           responseModalities: [Modality.AUDIO],
           speechConfig: {
             voiceConfig: {
@@ -250,10 +240,11 @@ async function startServer() {
         voice: chosenVoice,
       });
     } catch (err: any) {
-      console.error('Error in /api/tts:', err);
+      console.error(JSON.stringify({ event: 'tts_provider_error' }));
+      if (res.destroyed || res.writableEnded) return;
       res
         .status(500)
-        .json({ error: err.message || 'Failed to synthesize speech' });
+        .json({ error: 'Falha temporária no atendimento.' });
     }
   });
 
@@ -269,6 +260,7 @@ async function startServer() {
 
       const response = await ai.models.generateContent({
         model: 'gemini-3.5-transcribe',
+        config: { abortSignal: res.locals.aiSignal },
         contents: {
           parts: [
             {
@@ -309,119 +301,16 @@ async function startServer() {
 
       res.json({ text: transcription.trim() });
     } catch (err: any) {
-      console.error('Error in /api/transcribe:', err);
+      console.error(JSON.stringify({ event: 'transcribe_provider_error' }));
+      if (res.destroyed || res.writableEnded) return;
       res
         .status(500)
-        .json({ error: err.message || 'Failed to transcribe audio' });
+        .json({ error: 'Falha temporária no atendimento.' });
     }
   });
 
   const httpServer = http.createServer(app);
-  const wss = new WebSocketServer({ server: httpServer, path: '/api/live' });
-
-  wss.on('connection', (clientWs: WebSocket) => {
-    let session: any = null;
-    let isClosed = false;
-
-    clientWs.on('message', async (raw) => {
-      try {
-        const msg = JSON.parse(raw.toString());
-
-        if (msg.setup) {
-          const { systemInstruction, voice = 'Kore' } = msg.setup;
-          const ai = getGeminiClient();
-
-          const liveBaseInstruction =
-            systemInstruction && systemInstruction.trim()
-              ? systemInstruction.trim()
-              : 'Você é o >_ neøtiko, o atendente e consultor oficial neøflow.';
-          const finalLiveInstruction = `${liveBaseInstruction}\n\n${SERVER_SECURITY_ENFORCEMENT}`;
-
-          session = await ai.live.connect({
-            model: 'gemini-3.1-flash-live-preview',
-            config: {
-              responseModalities: [Modality.AUDIO],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: { voiceName: voice || 'Kore' },
-                },
-              },
-              systemInstruction: finalLiveInstruction,
-              outputAudioTranscription: {},
-              inputAudioTranscription: {},
-            },
-            callbacks: {
-              onmessage: (message: LiveServerMessage) => {
-                if (isClosed || clientWs.readyState !== WebSocket.OPEN) return;
-
-                const audio =
-                  message.serverContent?.modelTurn?.parts?.[0]?.inlineData
-                    ?.data;
-                const interrupted = message.serverContent?.interrupted;
-                const turnComplete = message.serverContent?.turnComplete;
-
-                // Transcriptions if emitted
-                const outputTranscription = (message.serverContent as any)
-                  ?.outputAudioTranscription?.text;
-                const inputTranscription = (message.serverContent as any)
-                  ?.inputAudioTranscription?.text;
-
-                clientWs.send(
-                  JSON.stringify({
-                    audio,
-                    interrupted,
-                    turnComplete,
-                    outputTranscription,
-                    inputTranscription,
-                  })
-                );
-              },
-              onclose: () => {
-                if (!isClosed && clientWs.readyState === WebSocket.OPEN) {
-                  clientWs.send(JSON.stringify({ closed: true }));
-                }
-              },
-              onerror: (err: any) => {
-                console.error('Gemini Live callback error:', err);
-                if (!isClosed && clientWs.readyState === WebSocket.OPEN) {
-                  clientWs.send(
-                    JSON.stringify({ error: err.message || 'Live API error' })
-                  );
-                }
-              },
-            },
-          });
-
-          clientWs.send(JSON.stringify({ ready: true }));
-          return;
-        }
-
-        if (msg.audio && session) {
-          session.sendRealtimeInput({
-            audio: { data: msg.audio, mimeType: 'audio/pcm;rate=16000' },
-          });
-        }
-      } catch (err: any) {
-        console.error('Error processing WebSocket live message:', err);
-        if (clientWs.readyState === WebSocket.OPEN) {
-          clientWs.send(
-            JSON.stringify({ error: err.message || 'Failed to handle message' })
-          );
-        }
-      }
-    });
-
-    clientWs.on('close', () => {
-      isClosed = true;
-      if (session) {
-        try {
-          session.close();
-        } catch (e) {
-          console.error('Error closing Live session:', e);
-        }
-      }
-    });
-  });
+  installLiveServer(httpServer, limits, aiBudget, getGeminiClient, SERVER_SECURITY_ENFORCEMENT);
 
   // Vite middleware for development vs static build in production
   if (process.env.NODE_ENV !== 'production') {

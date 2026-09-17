@@ -250,3 +250,37 @@ Se desejar persistir histórico de conversas e personas além do `localStorage` 
 1. No painel do projeto no Railway, clique em **New > Database > PostgreSQL**.
 2. Conecte sua `apps/api` ao banco usando a variável `DATABASE_URL` injetada automaticamente pelo Railway.
 3. Utilize um ORM leve como **Drizzle ORM** ou **Prisma** para salvar as mensagens e personas dos usuários.
+
+## Controles de consumo da triagem — 2026-09-17
+
+O atendimento permanece público. A aplicação valida Origin nos POSTs `/api/*`
+e no WebSocket `/api/live`, antes de chamar o provedor. Origin não autentica
+clientes fora do navegador; o limite global de consumo é uma proteção adicional.
+Não confiar em `X-Forwarded-For` ou `CF-Connecting-IP` enviados pelo cliente.
+
+| Variável | Padrão | Efeito |
+| --- | --- | --- |
+| `TRIAGE_AI_ENABLED` | habilitado | `false` bloqueia novos atendimentos sem afetar health/static. Sessões existentes terminam pelo limite de duração. |
+| `TRIAGE_ALLOWED_ORIGINS` | `https://triage.neotiktok.com,https://neotiktok.com` | Lista exata de origens, separada por vírgula. Ausência de Origin é rejeitada. |
+| `TRIAGE_AI_CONCURRENCY` | 8 | Teto compartilhado HTTP/live por processo. |
+| `TRIAGE_AI_STARTS_PER_MINUTE` | 30 | Novos atendimentos por janela móvel de 60 segundos, por processo. |
+| `TRIAGE_HTTP_TIMEOUT_MS` | 60000 | Deadline HTTP com AbortSignal enviado ao SDK. |
+| `TRIAGE_LIVE_DURATION_MS` | 300000 | Duração máxima da conexão live. |
+| `TRIAGE_LIVE_SETUP_TIMEOUT_MS` | 15000 | Prazo para abrir a sessão do provedor. |
+| `TRIAGE_MAX_PAYLOAD_BYTES` | 262144 | Limite de cada mensagem WebSocket. |
+| `TRIAGE_LIVE_MESSAGES_PER_SECOND` | 100 | Limite de mensagens por conexão. |
+| `TRIAGE_CHAT_MODEL` | modelo já utilizado pelo servidor | Modelo de chat sob controle do servidor; parâmetros públicos de modelo, thinking e grounding não selecionam recursos adicionais. |
+
+JSON HTTP limitado a 2 MB. Chat limitado a 2048 tokens de saída. Erros do
+provedor não são devolvidos nem registrados integralmente. Setup live é aceito
+uma única vez; conexões tardias são encerradas se o visitante já saiu. Uma
+conexão pendente mantém sua vaga até resolver, evitando liberar concorrência
+antes de encerrar a abertura do recurso externo.
+
+Limites são locais ao processo e reiniciam com ele. Réplicas multiplicam o teto;
+esta entrega não modifica WAF, quotas da conta ou autenticação. Não é um teto
+financeiro global. Em desenvolvimento são aceitos também localhost/127.0.0.1
+na porta 3000. Para outras portas, configurar `TRIAGE_ALLOWED_ORIGINS`.
+
+Validação local: `pnpm test`, `pnpm lint`, `pnpm build`. Os testes usam HTTP e
+WebSocket reais locais com provedor simulado, sem consumo de IA ou credenciais.

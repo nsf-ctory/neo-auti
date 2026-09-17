@@ -1,0 +1,9 @@
+.git
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/*.log
+.DS_Store
+packages/db/src/generated
+packages/db/generated
