@@ -31,7 +31,7 @@
    - **Domínio Público Canônico:** `https://triage.neotiktok.com` (apontamento CNAME + verificação Cloudflare).
    - **Git Remoto Soberano:** O remote canônico é o **Gitea** via remotes SSH (`ssh://git@...`), garantindo soberania total contra bloqueios de terceiros.
    - **Deploy Autônomo:** Executado via `Dockerfile` com BuildKit no Railway (`railway up . --path-as-root --service neo-triage-agent -e production`).
-   - **Object Storage & Mídia (Cloudflare R2):** Anexos, imagens e mídias de chat utilizam o bucket `neotiktok` via S3 API (`https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com`) com CDN pública em `https://cdn.neoflowoff.agency`.
+   - **Object Storage & Mídia (Cloudflare R2):** Anexos, imagens e mídias de chat utilizam o bucket `neotiktok` via S3 API (`https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com`) com CDN pública em `https://cdn.neotiktok.com`.
 
 6. **Padrão Canônico de Estilização (Tailwind CSS v4):**
    - Obedecer integralmente a `_standards/TAILWIND_V4_STANDARDS.md`.

@@ -366,7 +366,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={handleClearChat}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-zinc-500 hover:text-[#fe2c55] hover:bg-zinc-100 dark:hover:bg-white/[0.05] transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-zinc-500 hover:text-[#fe2c55] hover:bg-zinc-100 dark:hover:bg-white/5 transition-all cursor-pointer"
                     title="Reiniciar atendimento e limpar histórico"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
