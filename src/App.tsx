@@ -196,7 +196,7 @@ export default function App() {
         ? 'gemini-3.1-pro-preview'
         : selectedModel;
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -240,6 +240,16 @@ export default function App() {
                 const parsed = JSON.parse(dataStr);
                 if (parsed.text) {
                   assistantText += parsed.text;
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === assistantMessageId
+                        ? { ...msg, content: assistantText }
+                        : msg
+                    )
+                  );
+                }
+                if (parsed.error) {
+                  assistantText = parsed.error;
                   setMessages((prev) =>
                     prev.map((msg) =>
                       msg.id === assistantMessageId

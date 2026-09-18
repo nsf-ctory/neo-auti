@@ -4,6 +4,7 @@ import {
 } from '@google/genai';
 import dotenv from 'dotenv';
 import { aiLimits, AiBudget, guardAiHttp } from './ai-guard';
+import { createChatStreamHandler } from './chat-stream';
 import express from 'express';
 import http from 'http';
 import path from 'path';
@@ -108,92 +109,7 @@ async function startServer() {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // Streaming chat endpoint
-  app.post('/api/chat/stream', async (req, res) => {
-    try {
-      const {
-        messages = [],
-        systemInstruction = '',
-        temperature,
-      } = req.body;
-
-      const ai = getGeminiClient();
-
-      // Format messages for Gemini SDK
-      const contents = messages.map((m: any) => {
-        const parts: any[] = [];
-        if (m.image?.data && m.image?.mimeType) {
-          parts.push({
-            inlineData: {
-              mimeType: m.image.mimeType,
-              data: m.image.data,
-            },
-          });
-        }
-        if (m.content && m.content.trim()) {
-          parts.push({ text: m.content });
-        }
-        return {
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: parts.length > 0 ? parts : [{ text: '' }],
-        };
-      });
-
-      // Config
-      const config: any = { abortSignal: res.locals.aiSignal, maxOutputTokens: 2048 };
-      const baseInstruction =
-        systemInstruction && systemInstruction.trim()
-          ? systemInstruction.trim()
-          : 'Você é o >_ neøtiko, o atendente e consultor oficial neøflow.';
-      config.systemInstruction = `${baseInstruction}\n\n${SERVER_SECURITY_ENFORCEMENT}`;
-      if (typeof temperature === 'number') {
-        config.temperature = temperature;
-      }
-
-      // Model/cost policy belongs to the server, never to an anonymous caller.
-      const selectedModel = process.env.TRIAGE_CHAT_MODEL || 'gemini-3.8-flash';
-
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
-
-      const responseStream = await ai.models.generateContentStream({
-        model: selectedModel,
-        contents,
-        config,
-      });
-
-      let collectedSources: any[] = [];
-
-      for await (const chunk of responseStream) {
-        const text = chunk.text || '';
-        const grounding = chunk.candidates?.[0]?.groundingMetadata;
-        if (grounding?.groundingChunks) {
-          collectedSources = grounding.groundingChunks;
-        }
-        res.write(
-          `data: ${JSON.stringify({ text, sources: collectedSources })}\n\n`
-        );
-      }
-
-      res.write('data: [DONE]\n\n');
-      res.end();
-    } catch (err: any) {
-      console.error(JSON.stringify({ event: 'chat_provider_error' }));
-      if (res.destroyed || res.writableEnded) return;
-      if (!res.headersSent) {
-        res
-          .status(500)
-          .json({ error: 'Falha temporária no atendimento.' });
-      } else {
-        res.write(
-          `data: ${JSON.stringify({ error: 'Falha temporária no atendimento.' })}\n\n`
-        );
-        res.write('data: [DONE]\n\n');
-        res.end();
-      }
-    }
-  });
+  app.post('/api/chat/stream', createChatStreamHandler(getGeminiClient, SERVER_SECURITY_ENFORCEMENT));
 
   // Text-To-Speech endpoint using gemini-3.1-flash-tts-preview
   app.post('/api/tts', async (req, res) => {

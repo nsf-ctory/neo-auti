@@ -15,7 +15,7 @@ Este documento detalha como estruturar, desenvolver e colocar em produção a ar
                └───────────────────┬────────────────────┘
                                    │
               HTTP REST + SSE      │   WebSocket Bidirecional (Live)
-              (/api/chat, /api/tts)│   (/api/live - PCM 16/24kHz)
+              (/api/chat/stream, /api/tts)│   (/api/live - PCM 16/24kHz)
                                    ▼
                ┌────────────────────────────────────────┐
                │          Backend API (Node.js)         │
