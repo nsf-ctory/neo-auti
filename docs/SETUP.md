@@ -261,7 +261,7 @@ Não confiar em `X-Forwarded-For` ou `CF-Connecting-IP` enviados pelo cliente.
 | Variável | Padrão | Efeito |
 | --- | --- | --- |
 | `TRIAGE_AI_ENABLED` | habilitado | `false` bloqueia novos atendimentos sem afetar health/static. Sessões existentes terminam pelo limite de duração. |
-| `TRIAGE_ALLOWED_ORIGINS` | `https://triage.neotiktok.com,https://neotiktok.com` | Lista exata de origens, separada por vírgula. Ausência de Origin é rejeitada. |
+| `TRIAGE_ALLOWED_ORIGINS` | `https://triage.neoflowoff.agency,https://partners.neoflowoff.agency` | Lista exata de origens, separada por vírgula. Ausência de Origin é rejeitada. |
 | `TRIAGE_AI_CONCURRENCY` | 8 | Teto compartilhado HTTP/live por processo. |
 | `TRIAGE_AI_STARTS_PER_MINUTE` | 30 | Novos atendimentos por janela móvel de 60 segundos, por processo. |
 | `TRIAGE_HTTP_TIMEOUT_MS` | 60000 | Deadline HTTP com AbortSignal enviado ao SDK. |
