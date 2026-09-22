@@ -7,7 +7,7 @@ import { WebSocket } from 'ws';
 import { aiLimits, AiBudget, guardAiHttp } from '../ai-guard';
 import { installLiveServer } from '../live-server';
 
-const origin = 'https://triage.neotiktok.com';
+const origin = 'https://triage.neoflowoff.agency';
 function limits(extra = {}) {
   return { ...aiLimits({ NODE_ENV: 'production' }), ...extra };
 }

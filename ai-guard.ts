@@ -9,7 +9,7 @@ function positiveInteger(value: string | undefined, fallback: number): number {
 
 export function aiLimits(env: NodeJS.ProcessEnv = process.env) {
   const origins = new Set((env.TRIAGE_ALLOWED_ORIGINS ??
-    'https://triage.neotiktok.com,https://neotiktok.com').split(',').map(s => s.trim()).filter(Boolean));
+    'https://triage.neoflowoff.agency,https://partners.neoflowoff.agency').split(',').map(s => s.trim()).filter(Boolean));
   if (env.NODE_ENV !== 'production') {
     origins.add('http://localhost:3000');
     origins.add('http://127.0.0.1:3000');
@@ -42,11 +42,23 @@ export class AiBudget {
   }
 }
 
+export function isOriginAllowed(origin: string | undefined, origins: Set<string>): boolean {
+  if (!origin) return false;
+  if (origins.has(origin)) return true;
+  try {
+    const hostname = new URL(origin).hostname;
+    if (hostname === 'neoflowoff.agency' || hostname.endsWith('.neoflowoff.agency')) {
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
 export function guardAiHttp(limits: ReturnType<typeof aiLimits>, budget: AiBudget): RequestHandler {
   return (req, res, next) => {
     if (req.method !== 'POST') return next();
     if (!limits.enabled) return void res.status(503).json({ error: 'Atendimento temporariamente indisponível.' });
-    if (!req.headers.origin || !limits.origins.has(req.headers.origin)) {
+    if (!isOriginAllowed(req.headers.origin, limits.origins)) {
       return void res.status(403).json({ error: 'Origem não permitida.' });
     }
     const release = budget.acquire();

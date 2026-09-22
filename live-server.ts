@@ -1,13 +1,13 @@
 import { Modality, type GoogleGenAI, type LiveServerMessage } from '@google/genai';
 import type { Server } from 'node:http';
 import { WebSocket, WebSocketServer } from 'ws';
-import { AiBudget, aiLimits } from './ai-guard';
+import { AiBudget, aiLimits, isOriginAllowed } from './ai-guard';
 
 export function installLiveServer(httpServer: Server, limits: ReturnType<typeof aiLimits>,
   aiBudget: AiBudget, getGeminiClient: () => GoogleGenAI, enforcement: string) {
   const wss = new WebSocketServer({
     server: httpServer, path: '/api/live', maxPayload: limits.maxPayload,
-    verifyClient: ({ origin }) => limits.enabled && limits.origins.has(origin),
+    verifyClient: ({ origin }) => limits.enabled && isOriginAllowed(origin, limits.origins),
   });
 
   wss.on('connection', (clientWs: WebSocket) => {
