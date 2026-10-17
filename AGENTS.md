@@ -38,3 +38,18 @@
    - **Sintaxe v4 obrigatória:** Utilizar `bg-linear-to-*` em vez de `bg-gradient-to-*`.
    - **Escala métrica nativa vs. Colchetes:** Proibido o uso de classes arbitrárias `[Npx]` para valores existentes na escala do Tailwind (ex: usar `min-h-11` em vez de `min-h-[44px]`, `min-h-9` em vez de `min-h-[36px]`, `min-h-10` para `40px`, `min-h-12.5` para `50px`).
    - **Paleta Canônica:** `#0b0b0c`, `#050505`, `#121214`, `zinc-*`, `#fe2c55`, `#00f2fe`, `#d7fe09`, `#9bb7c3`. Zero tolerância para cores legadas (`stone-*`, `purple-*`, etc.).
+
+## Contrato operacional de publicação
+
+Antes de modificar ou publicar este serviço, leia
+`../flowoff-tiktok-control-plane/STATE.md`,
+`../flowoff-tiktok-control-plane/DECISIONS.md`,
+`../flowoff-tiktok-control-plane/docs/operations/PRODUCTION-RUNBOOK.md` e
+`../flowoff-tiktok-control-plane/docs/operations/DEPLOY-SPEC.md`. Identifique
+o runtime efetivo e o escopo autorizado; o deploy `d798de6` comprovou somente
+a publicação do frontend.
+
+Não extrapole o procedimento de `front` para triage sem uma validação própria.
+Preserve secrets e dependências, valide build/health compatíveis, registre
+commit, imagem, container e horário quando houver publicação autorizada e
+mantenha separados push, deploy, health e E2E.
