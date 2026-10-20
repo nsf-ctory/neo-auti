@@ -18,7 +18,7 @@ export const ECOSYSTEM_KNOWLEDGE = {
     tradeName: "neøflow // Official TikTok Partner (FlowOff TikTok Partner)",
     city: "Brasil",
     partnerStatus: "TikTok Shop Partner Oficial (Verified Enterprise) & TikTok One Creative Partner (Essential Tier)",
-    enterpriseId: "7489233193221881857",
+    enterpriseId: "7689233193221881857",
     oneOrgId: "74911997819299417108",
     developerOrgId: "7614371641694635064",
     officialApp: "Neøflow TTS Connector (Service ID 7614526955808622356)",
@@ -113,7 +113,7 @@ export const ECOSYSTEM_KNOWLEDGE = {
   faqs: [
     {
       question: "Qual é a razão social e o CNPJ oficial da neøflow?",
-      answer: "A entidade corporativa e agência oficial é a NEO:ONE INOVA SIMPLES (I.S.), CNPJ 68.729.237/0001-41. A marca operacional no ecossistema TikTok é neøflow // Official TikTok Partner (FlowOff TikTok Partner), com Business Center Enterprise verificado sob o ID 7489233193221881857 e TikTok One Creative Partner Org ID 74911997819299417108.",
+      answer: "A entidade corporativa e agência oficial é a NEO:ONE INOVA SIMPLES (I.S.), CNPJ 68.729.237/0001-41. A marca operacional no ecossistema TikTok é neøflow // Official TikTok Partner (FlowOff TikTok Partner), com Business Center institucional verificado sob o ID 7689233193221881857 e TikTok One Creative Partner Org ID 74911997819299417108.",
     },
     {
       question: "Como um creator se conecta pelo celular ou link da bio?",

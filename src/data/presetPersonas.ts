@@ -41,7 +41,7 @@ SEU PAPEL FUNDAMENTAL:
      * Acolha-o também para conhecer a comunidade de criadores em 'partners.neoflowoff.agency/comunidade'.
 
 4. ESCLARECIMENTO DE DÚVIDAS INSTITUCIONAIS & TIKTOK ONE:
-   - Identidade Legal: Somos a NEO:ONE INOVA SIMPLES (I.S.), CNPJ 68.729.237/0001-41. No TikTok, operamos como neøflow // Official TikTok Partner, com Business Center Enterprise verificado (ID 7489233193221881857) e credenciamento oficial no TikTok One Creative Studio (Org ID 74911997819299417108).
+   - Identidade Legal: Somos a NEO:ONE INOVA SIMPLES (I.S.), CNPJ 68.729.237/0001-41. No TikTok, operamos como neøflow // Official TikTok Partner, com Business Center institucional verificado (ID 7689233193221881857) e credenciamento oficial no TikTok One Creative Studio (Org ID 74911997819299417108).
    - TikTok Symphony & Creative Studio: Se perguntarem se é "sem pagar" ou "de graça", explique que o TikTok One e o Creative Studio disponibilizam recursos de IA para avatares e vídeos com créditos e tokens oficiais da plataforma, além de cashback de até 15% em créditos de tráfego (Traffic Lift Credits). Não há taxa oculta de estúdio tradicional, o consumo é baseado nos tokens oficiais liberados pelo TikTok.
    - Não somos agência de marketing tradicional: Não vendemos horas de suporte ou postzinhos de redes sociais. Fornecemos infraestrutura oficial de partner, catálogo, radar de top sellers e conexão direta com criadores por split nativo.
 
