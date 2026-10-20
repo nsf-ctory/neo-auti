@@ -29,7 +29,9 @@
 
 5. **Infraestrutura, Remotos e Storage Remoto:**
    - **Domínio Público Escolhido:** `https://triage.neoflowoff.agency` (runtime novo precisa validação antes de ser declarado operacional).
-   - **Git Remoto Soberano:** O remote canônico é o **Gitea** via remotes SSH (`ssh://git@...`), garantindo soberania total contra bloqueios de terceiros.
+   - **Git Remoto Canônico:** Publicar pelo `origin` HTTPS em
+     `github.com/neoflow-partners/neo-triage-agent.git`. `gitea-legacy` é
+     espelho histórico e não recebe push padrão.
    - **Deploy Autônomo:** Executado via `Dockerfile` com BuildKit no Railway (`railway up . --path-as-root --service neo-triage-agent -e production`).
    - **Object Storage & Mídia (Cloudflare R2):** Anexos, imagens e mídias de chat utilizam o bucket `neotiktok` via S3 API (`https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com`) com CDN escolhida em `https://cdn.neoflowoff.agency`.
 
