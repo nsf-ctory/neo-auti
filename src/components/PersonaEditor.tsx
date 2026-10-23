@@ -30,7 +30,7 @@ export function PersonaEditor({
   persona,
   onUpdatePersona,
   onClose,
-  selectedModel = 'gemini-3.8-flash',
+  selectedModel = 'gemini-3.5-flash',
   onSelectModel,
   isThinkingMode = false,
   onToggleThinking,

@@ -73,7 +73,7 @@ export default function App() {
   const [isThinkingMode, setIsThinkingMode] = useState(false);
   const [isSearchGrounding, setIsSearchGrounding] = useState(false);
   const [selectedModel, setSelectedModel] =
-    useState<string>('gemini-3.8-flash');
+    useState<string>('gemini-3.5-flash');
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
