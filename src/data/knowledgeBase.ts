@@ -1,7 +1,9 @@
 /**
  * BASE DE CONHECIMENTO CANÔNICA // NEØFLOW TIKTOK PARTNER
  * Memória persistente e dados de operação para o agente de triagem >_ neøtiko.
- * Atualizado com as homologações, verificações e lançamentos de outubro/2026.
+ * Revisado em 2026-10-23 contra as fontes públicas do TikTok e o estado
+ * canônico do ecossistema. Elegibilidade, escopos, recursos, cotas e termos
+ * comerciais são determinados pelo TikTok, pelo mercado e pela conta efetiva.
  */
 
 export interface KnowledgeSection {
@@ -36,16 +38,13 @@ export const ECOSYSTEM_KNOWLEDGE = {
       name: "SHOP / SELLERS",
       target: "Lojistas, marcas e operações de e-commerce que querem vender no TikTok Shop.",
       prerequisites: [
-        "CNPJ ativo e regular no Brasil (MEI, ME, LTDA ou S/A).",
-        "Cadastro de vendedor aprovado no TikTok Shop Seller Center oficial (seller-br.tiktok.com).",
-        "Estoque físico expedido a partir do território brasileiro com emissão de Nota Fiscal eletrônica (NF-e).",
+        "Na triagem brasileira da neøflow, verificamos CNPJ ativo, cadastro aprovado no Seller Center e operação logística/fiscal nacional.",
+        "A aprovação, os documentos aceitos e a elegibilidade final são definidos pelo Seller Center para a conta e o mercado efetivos.",
       ],
       unlockedFeatures: [
-        "Radar de Top Sellers: Dados de inteligência de catálogo para identificar quais produtos do seu nicho têm tração comprovada de vendas e alta conversão no TikTok.",
-        "Aba Exclusiva de Creators: Ferramenta proprietária neøflow para pesquisar, filtrar e conectar criadores de conteúdo alinhados ao seu produto para comissionamento e envio de amostras sem intermediários de agência.",
-        "Sincronização Oficial via API: Produtos, estoque e pedidos sincronizados em tempo real sem planilhas manuais via Neøflow TTS Connector (Service ID 7614526955808622356).",
-        "Split Automático de Pagamento: Divisão nativa no ato da compra entre seller, criador e taxas, 100% hands-off.",
-        "Autorização Segura ISV: Escopos homologados seller.shop.info, seller.authorization.info e seller.order.info.",
+        "Conexão segura do app, mediante consentimento do seller, para os escopos efetivamente autorizados.",
+        "A orientação para catálogo, pedidos, creators e automações depende da autorização ativa e da capacidade liberada para a loja.",
+        "Não prometa split, catálogo, logística, comissão ou sincronização como automáticos antes de confirmar a modalidade e a aprovação no ambiente oficial.",
       ],
       officialRoute: "/sellers/conectar",
       fallbackIfNoShop: "Orientar abertura prévia de conta de vendedor em https://seller-br.tiktok.com antes de conectar com a neøflow.",
@@ -53,20 +52,16 @@ export const ECOSYSTEM_KNOWLEDGE = {
     {
       code: "02",
       name: "CREATORS / AFILIADOS",
-      target: "Criadores de conteúdo, influenciadores, apresentadores de LIVE e streamers.",
+      target: "Criadores de conteúdo, influenciadores, apresentadores de LIVE, streamers e pessoas que querem entender oportunidades de colaboração.",
       prerequisites: [
         "Conta ativa e em conformidade com as Diretrizes da Comunidade do TikTok.",
-        "Perfil habilitado para o programa Alliance Creator / TikTok Shop Creator.",
-        "CPF ou CNPJ cadastrado para recebimento de comissões na carteira do TikTok.",
+        "TikTok One depende de disponibilidade regional, maioridade, conformidade com as políticas e requisitos específicos de cada projeto.",
+        "Login Kit, TikTok One e TikTok Shop Affiliate são jornadas separadas; conectar a identidade não concede inscrição, comissão ou elegibilidade em outra jornada.",
       ],
       unlockedFeatures: [
-        "TikTok Login Kit (/app-in): Conexão instantânea com 1 clique utilizando a conta do TikTok para sincronizar nome público e avatar oficial em tempo real, sem formulários manuais.",
-        "Experiência 9:16 Minis-First: Interface vertical nativa pensada para o formato do TikTok e navegação fluida no celular.",
-        "Conteúdo no Centro: Monetização nativa integrada aos vídeos e LIVEs sem parecer publicidade invasiva ou forçada.",
-        "Catálogo Curado com Estoque Real: Acesso a produtos de marcas verificadas no Brasil com entrega garantida aos seguidores.",
-        "Checkout 1-Clique por Pix: Páginas de produto em formato vertical para compra instantânea sem atrito.",
-        "Comissões Diretas na Carteira: Split nativo processado pelo TikTok, sem risco de calote ou relatórios manuais de marcas.",
-        "Comunidade Exclusiva: Hub de acolhimento e suporte direto para criadores em /comunidade.",
+        "TikTok Login Kit (/app-in): conexão consentida para identidade e sessão, sem criar automaticamente participação em TikTok One ou Affiliate.",
+        "TikTok One: oportunidades por convite, candidatura aberta ou link de convite, sujeitas a requisitos do projeto e aceite da marca ou do TikTok.",
+        "Comunidade e orientação: hub de acolhimento em /comunidade e esclarecimento honesto sobre o próximo caminho oficial.",
       ],
       officialRoute: "/creators",
       appInRoute: "/app-in",
@@ -84,11 +79,9 @@ export const ECOSYSTEM_KNOWLEDGE = {
         "Catálogo sincronizado com o TikTok Catalog Manager / TikTok Shop.",
       ],
       unlockedFeatures: [
-        "Conexão SKU-Tráfego: Anúncios alimentados pelo estoque e pelas vendas reais do Shop (zero desperdício com produtos pausados).",
-        "TikTok One Creative Partner: Credenciamento oficial Essential Tier verificado em outubro/2026 (Org ID 74911997819299417108).",
-        "TikTok Symphony & Creative Studio: Acesso aos recursos oficiais de IA generativa para roteiros, avatares e criativos nativos em escala.",
-        "Créditos & Tokens Institucionais: O TikTok One e o Creative Studio disponibilizam cotas de tokens e créditos oficiais de IA e até 15% de Traffic Lift Credits (cashback algorítmico em visualizações para Spark Ads nos primeiros 7 dias).",
-        "Spark Ads & Events API: Impulsionamento com código de autorização de criadores e rastreamento seguro via Events API com SHA-256 (Pixel D9SJPC3C77U97D5QGU0G).",
+        "TikTok One reúne oportunidades de colaboração e recursos criativos; recursos, disponibilidade, cotas e condições comerciais variam por conta, região e projeto.",
+        "Para conteúdo comercial, a divulgação de conteúdo comercial é obrigatória; projetos TikTok One fazem essa gestão na própria plataforma.",
+        "Spark Ads e mensuração exigem as autorizações e configurações aplicáveis de cada conta. Não prometa crédito, cashback, tokens ou resultado de campanha.",
       ],
       officialRoute: "/marketing",
     },
@@ -101,14 +94,21 @@ export const ECOSYSTEM_KNOWLEDGE = {
         "Service Account com chave de API ou credenciais de integração no Partner Center.",
       ],
       unlockedFeatures: [
-        "SDK Oficial @neomello/tiktok-sdk: Modelos fortemente tipados cobrindo 41 escopos oficiais de API do TikTok Shop (Lojas, Pedidos, Finanças, Logística, Produtos e Devoluções).",
+        "SDK TikTok Shop: o pacote Node.js é gerado no Partner Center conforme o app efetivo, os escopos aprovados e as versões de API disponíveis; não existe uma única versão global aplicável a todas as contas.",
         "Quatro Jornadas de Autorização Independentes: Seller (services.tiktokshop.com), Creator Shop Alliance (shop.tiktok.com), Login Kit (www.tiktok.com/v2/auth/authorize/) e Partner TAP (partner.tiktokshop.com).",
-        "Motor de Webhooks Assíncronos: Processamento em tempo real com BullMQ + Redis, idempotência e assinatura HMAC SHA-256.",
-        "Auto-Refresh de Tokens em Background: Gestão automática do ciclo de vida dos tokens OAuth para zero queda de sessão em produção.",
-        "Integração com ERPs Nacionais: Conexão facilitada para Bling, Tiny, VTEX, Shopify e hubs de marketplace.",
+        "A presença de um método no SDK não prova escopo, token, autorização ou elegibilidade para utilizá-lo. Isso é confirmado no Partner Center e no fluxo de consentimento correspondente.",
+        "Integrações técnicas passam por análise de contrato, escopo e mercado antes de qualquer promessa de automação.",
       ],
       officialRoute: "/tech",
     },
+  ],
+  platformGuidance: [
+    "Use somente fatos presentes nesta base para afirmar estado atual. Para regras novas, elegibilidade, créditos, pagamentos ou disponibilidade, explique que a confirmação depende da conta, do mercado e da tela oficial do TikTok.",
+    "Quando alguém disser 'apoiador', pergunte qual contexto: fã de LIVE/Fã-clube, moderador ou co-host de LIVE, creator que busca oportunidades de marca, ou afiliado de TikTok Shop. Não trate o termo como uma categoria única de TikTok One ou da API Shop.",
+    "Apoiadores de LIVE podem interagir com criadores por visualização, chat, curtidas e Presentes quando o recurso está disponível. Isso não concede papel de creator, acesso a TikTok One, escopo de API ou comissão de Shop.",
+    "TikTok One exige disponibilidade regional, 18 anos ou mais e conformidade com as políticas. Para participar de projetos, o TikTok informa como referência pelo menos 1.000 seguidores, além de critérios que variam por projeto.",
+    "Os quatro tipos públicos de projeto TikTok One são Creator Marketing, Branded Buzz, Spark Opportunity Program e TikTok Creative Challenge. Convite, candidatura e pagamento dependem do projeto e do aceite da plataforma ou da marca.",
+    "Nunca prometa aprovação, alcance, pagamento, crédito, cashback, token, comissão, acesso a SDK ou resultado de campanha.",
   ],
   faqs: [
     {
@@ -129,11 +129,11 @@ export const ECOSYSTEM_KNOWLEDGE = {
     },
     {
       question: "Vocês deixam acessar o Symphony de graça / sem pagar?",
-      answer: "O TikTok Creative Studio e a suíte TikTok Symphony disponibilizam modelos de inteligência artificial, avatares e ferramentas de edição dentro do ecossistema oficial do TikTok One. Como parceiro verificado no TikTok One (Org ID 74911997819299417108), ajudamos marcas e criadores a acessar as cotas oficiais de tokens de IA e créditos de tráfego (Traffic Lift Credits de até 15%). O consumo é baseado nos tokens oficiais disponibilizados pela própria plataforma, sem taxas ocultas de estúdios tradicionais.",
+      answer: "O TikTok disponibiliza recursos criativos conforme a conta, o mercado, o produto e os termos vigentes. Não prometemos acesso gratuito, cota de tokens, créditos de tráfego ou cashback: isso precisa ser confirmado no ambiente oficial aplicável antes de qualquer decisão.",
     },
     {
       question: "Posso conectar minha loja usando apenas CPF (Pessoa Física)?",
-      answer: "Não. A operação de vendas no TikTok Shop Brasil é estritamente regulamentada e exige CNPJ ativo (MEI, ME, LTDA ou S/A), emissão de Nota Fiscal eletrônica (NF-e) e estoque despachado no Brasil. Se você ainda opera como pessoa física, recomendamos regularizar seu MEI ou empresa antes de conectar.",
+      answer: "Na nossa trilha de qualificação brasileira verificamos CNPJ ativo, aprovação no Seller Center e condições fiscais e logísticas. A decisão final e os documentos aceitos são exibidos pelo TikTok Shop para a conta e o mercado da sua loja; se ainda não houver loja aprovada, comece pelo Seller Center.",
     },
     {
       question: "A neøflow cobra mensalidade fixa de agência de marketing?",
@@ -141,11 +141,23 @@ export const ECOSYSTEM_KNOWLEDGE = {
     },
     {
       question: "O que acontece quando clico em 'Conectar minha Shop'?",
-      answer: "Você é redirecionado em ambiente seguro para o portal oficial do TikTok Shop (services.tiktokshop.com) para aprovar o acesso do app oficial Neøflow TTS Connector. Suas senhas e credenciais bancárias nunca são compartilhadas com a neøflow. Assim que você autoriza, seu catálogo e pedidos são integrados ao ecossistema.",
+      answer: "Você é redirecionado em ambiente seguro para o portal oficial do TikTok Shop para avaliar e aprovar o acesso solicitado pelo app. Suas senhas e credenciais bancárias não são compartilhadas com a neøflow. Os dados e automações liberados depois dependem dos escopos autorizados, do vínculo da loja e das regras vigentes da plataforma.",
     },
     {
       question: "E se eu ainda não tiver conta no TikTok Shop Seller Center?",
       answer: "O primeiro passo é criar sua conta oficial de vendedor no Seller Center do TikTok Brasil (https://seller-br.tiktok.com). Assim que seus documentos forem aprovados pelo TikTok, você volta aqui para conectar à neøflow e ativar os recursos de Top Sellers e creators.",
+    },
+    {
+      question: "O que são apoiadores no TikTok?",
+      answer: "'Apoiador' precisa de contexto. Em LIVE, normalmente é um fã que interage, acompanha ou envia Presentes quando o recurso está disponível; isso pode estar ligado ao Fã-clube. Moderador e co-host são papéis distintos concedidos pelo criador. Já TikTok One e TikTok Shop Affiliate são jornadas comerciais próprias: apoio a um creator não cria automaticamente acesso, comissão ou elegibilidade. Você está falando de LIVE, moderação, colaboração com marcas ou afiliados?",
+    },
+    {
+      question: "Conectar pelo Login Kit me coloca no TikTok One ou no Affiliate?",
+      answer: "Não automaticamente. O Login Kit autoriza identidade e sessão da aplicação. TikTok One, projetos de marca e TikTok Shop Affiliate têm regras, consentimentos e elegibilidade próprios. Posso orientar a entrada correta depois de entender se você busca colaboração de marca, LIVE ou produtos com comissão.",
+    },
+    {
+      question: "Existe um SDK novo do TikTok Shop?",
+      answer: "O TikTok Shop gera o SDK de Node.js de acordo com o app, os escopos aprovados e as versões disponíveis no Partner Center. Por isso não há uma única versão global a prometer. Atualizações devem partir do pacote baixado pela conta correta e ser comparadas com os escopos e contratos que ela realmente possui.",
     },
   ],
 };
@@ -168,6 +180,9 @@ export function buildKnowledgeMemoryPrompt(): string {
   parts.push(`- URL da Vitrine Oficial no Service Market: ${t.institution.serviceMarketUrl}`);
   parts.push(`- TikTok Pixel & Events API (SHA-256): ${t.institution.pixelId}.`);
   parts.push(`- Posicionamento Soberano: ${t.manifesto.coreBelief}`);
+
+  parts.push(`\n[REGRAS DE CONFIABILIDADE DA PLATAFORMA]`);
+  t.platformGuidance.forEach((rule) => parts.push(`- ${rule}`));
 
   parts.push(`\n[OS 4 TERRITÓRIOS E SUAS REGRAS DE QUALIFICAÇÃO]`);
   t.territories.forEach((terr) => {
