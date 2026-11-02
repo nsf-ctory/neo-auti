@@ -6,7 +6,6 @@ import {
   floatTo16BitPCM,
   pcmToBase64,
 } from '../utils/liveAudio';
-import { synthesizeSystemInstruction } from '../utils/promptSynthesizer';
 
 interface LiveVoiceModalProps {
   persona: Persona;
@@ -55,11 +54,9 @@ export function LiveVoiceModal({
 
     ws.onopen = () => {
       if (!isComponentActive) return;
-      const synthesizedPrompt = synthesizeSystemInstruction(persona);
       ws.send(
         JSON.stringify({
           setup: {
-            systemInstruction: synthesizedPrompt,
             voice: persona.humanization.speakingVoice || 'Kore',
           },
         })

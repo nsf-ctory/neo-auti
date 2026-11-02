@@ -4,7 +4,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import { AiBudget, aiLimits, isOriginAllowed } from './ai-guard';
 
 export function installLiveServer(httpServer: Server, limits: ReturnType<typeof aiLimits>,
-  aiBudget: AiBudget, getGeminiClient: () => GoogleGenAI, enforcement: string) {
+  aiBudget: AiBudget, getGeminiClient: () => GoogleGenAI, publicInstruction: string) {
   const wss = new WebSocketServer({
     server: httpServer, path: '/api/live', maxPayload: limits.maxPayload,
     verifyClient: ({ origin }) => limits.enabled && isOriginAllowed(origin, limits.origins),
@@ -34,18 +34,15 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
         if (msg.setup) {
           if (setupStarted) { clientWs.terminate(); return; }
           setupStarted = true; // Reserve before awaiting the provider connection.
-          if (typeof msg.setup !== 'object' ||
-              (msg.setup.systemInstruction !== undefined && typeof msg.setup.systemInstruction !== 'string')) {
+          if (typeof msg.setup !== 'object') {
             clientWs.terminate(); return;
           }
-          const { systemInstruction, voice = 'Kore' } = msg.setup;
+          const { voice = 'Kore' } = msg.setup;
           const ai = getGeminiClient();
-
-          const liveBaseInstruction =
-            systemInstruction && systemInstruction.trim()
-              ? systemInstruction.trim()
-              : 'Você é o >_ neøtiko, o atendente e consultor oficial neøflow.';
-          const finalLiveInstruction = `${liveBaseInstruction}\n\n${enforcement}`;
+          const allowedVoices = new Set(['Kore', 'Puck', 'Fenrir', 'Zephyr', 'Charon']);
+          const selectedVoice = typeof voice === 'string' && allowedVoices.has(voice)
+            ? voice
+            : 'Kore';
 
           setupPending = true;
           try {
@@ -55,10 +52,10 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
                 responseModalities: [Modality.AUDIO],
                 speechConfig: {
                   voiceConfig: {
-                    prebuiltVoiceConfig: { voiceName: voice || 'Kore' },
+                    prebuiltVoiceConfig: { voiceName: selectedVoice },
                   },
                 },
-                systemInstruction: finalLiveInstruction,
+                systemInstruction: publicInstruction,
                 outputAudioTranscription: {},
                 inputAudioTranscription: {},
               },

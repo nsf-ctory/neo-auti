@@ -27,12 +27,12 @@ function chatModelsFor(requestedModel: unknown): string[] {
 
 export function createChatStreamHandler(
   getGeminiClient: () => GoogleGenAI,
-  serverSecurityEnforcement: string,
+  publicInstruction: string,
 ): RequestHandler {
   return async (req, res) => {
     let streamResponseStarted = false;
     try {
-      const { messages = [], systemInstruction = '', temperature, model } = req.body;
+      const { messages = [], temperature, model } = req.body;
       const contents = messages.map((message: any) => {
         const parts: any[] = [];
         if (message.image?.data && message.image?.mimeType) {
@@ -42,10 +42,8 @@ export function createChatStreamHandler(
         return { role: message.role === 'assistant' ? 'model' : 'user', parts: parts.length ? parts : [{ text: '' }] };
       });
       const config: any = { abortSignal: res.locals.aiSignal, maxOutputTokens: 2048 };
-      const baseInstruction = systemInstruction && systemInstruction.trim()
-        ? systemInstruction.trim()
-        : 'Você é o >_ neøtiko, o atendente e consultor oficial neøflow.';
-      config.systemInstruction = `${baseInstruction}\n\n${serverSecurityEnforcement}`;
+      // Nunca aceite prompt do browser: clientes públicos são não confiáveis.
+      config.systemInstruction = publicInstruction;
       if (typeof temperature === 'number') config.temperature = temperature;
 
       res.setHeader('Content-Type', 'text/event-stream');

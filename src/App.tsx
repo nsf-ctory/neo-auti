@@ -7,7 +7,6 @@ import { LiveVoiceModal } from './components/LiveVoiceModal';
 import { PersonaEditor } from './components/PersonaEditor';
 import { INITIAL_PERSONAS } from './data/presetPersonas';
 import { ChatMessageAttachment, Message, Persona } from './types';
-import { synthesizeSystemInstruction } from './utils/promptSynthesizer';
 
 const LOCAL_STORAGE_KEY = 'persona_studio_saved_personas_v2';
 const ACTIVE_PERSONA_KEY = 'persona_studio_active_id_v2';
@@ -176,9 +175,6 @@ export default function App() {
     setMessages([...newMessages, assistantPlaceholder]);
 
     try {
-      const synthesizedSystemInstruction =
-        synthesizeSystemInstruction(activePersona);
-
       const historyPayload = newMessages
         .filter((m) => m.id !== 'welcome' && m.id !== assistantMessageId)
         .map((m) => ({
@@ -201,7 +197,6 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: historyPayload,
-          systemInstruction: synthesizedSystemInstruction,
           model: modelToUse,
           searchGrounding: options?.searchGrounding,
           thinkingConfig: options?.isThinking
