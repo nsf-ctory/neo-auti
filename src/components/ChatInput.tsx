@@ -185,10 +185,10 @@ export function ChatInput({
               onClick={onStartLiveCall}
               disabled={isLoading}
               className="min-h-12.5 px-4 sm:px-5 rounded-2xl bg-[#fe2c55] hover:bg-[#e0264b] active:bg-[#c91e41] text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-md shadow-[#fe2c55]/25 active:scale-98 transition-all disabled:opacity-50 shrink-0"
-              title="Iniciar chamada de voz ao vivo em tempo real"
+              title="Iniciar chamada de voz em tempo real"
             >
               <Radio className="w-4 h-4 animate-pulse" />
-              <span>Voz ao Vivo</span>
+              <span>Converse por Voz</span>
             </button>
           </div>
         )}

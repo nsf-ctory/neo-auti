@@ -109,7 +109,7 @@ export default function App() {
         {
           id: 'welcome',
           role: 'assistant',
-          content: `Olá! Eu sou o **${activePersona.name}**, seu agente de atendimento inteligente e humanizado.\n\nComo posso te ajudar hoje? Você pode digitar sua dúvida, anexar imagens ou tocar em **"Voz ao Vivo"** no topo para falarmos em tempo real.`,
+          content: `Olá! Eu sou o **${activePersona.name}**, seu agente de atendimento inteligente e humanizado.\n\nComo posso te ajudar hoje? Você pode digitar sua dúvida, anexar imagens ou tocar em **"Converse por Voz"** no topo para falarmos em tempo real.`,
           timestamp: Date.now(),
         },
       ]);

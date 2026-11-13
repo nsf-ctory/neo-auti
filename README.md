@@ -22,7 +22,8 @@ O **`>_ neøtiko`** é o agente de atendimento inteligente, consultivo e humaniz
 - **Limpeza Direta de Histórico**: Botão de lixeira integrado ao cabeçalho para reiniciar a conversa com um toque.
 - **Backend Preservado**: Modelos adicionais de persona e o motor de síntese de prompt continuam ativos no backend (acesso ao painel de calibração via URL com `?config=true`).
 
-### 2. Voz ao Vivo Bidirecional (Gemini Live API)
+### 2. Conversa por Voz Bidirecional (Gemini Live API)
+
 - **Chamada de Voz Contínua**: Conexão WebSocket de ultra-baixa latência com streaming de áudio PCM (16kHz entrada, 24kHz saída).
 - **Interrupções Naturais**: Interrompa a fala do agente a qualquer momento com resposta instantânea.
 - **Visualizador de Ondas Sonoras**: Feedback visual em tempo real das frequências de voz do usuário e do agente.
