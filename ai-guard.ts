@@ -1,32 +1,28 @@
-import type { RequestHandler } from 'express';
-
 function positiveInteger(value: string | undefined, fallback: number): number {
   if (value === undefined) return fallback;
   const parsed = Number(value);
-  if (!Number.isSafeInteger(parsed) || parsed < 1) throw new Error('Invalid triage limit configuration.');
+  if (!Number.isSafeInteger(parsed) || parsed < 1) throw new Error('Invalid Auti. limit configuration.');
   return parsed;
 }
 
 export function aiLimits(env: NodeJS.ProcessEnv = process.env) {
-  const origins = new Set((env.TRIAGE_ALLOWED_ORIGINS ??
-    'https://triage.neoflowoff.agency,https://partners.neoflowoff.agency').split(',').map(s => s.trim()).filter(Boolean));
+  const origins = new Set((env.AUTI_ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean));
   if (env.NODE_ENV !== 'production') {
     origins.add('http://localhost:3000');
     origins.add('http://127.0.0.1:3000');
   }
   return {
-    enabled: env.TRIAGE_AI_ENABLED !== 'false', origins,
-    concurrency: positiveInteger(env.TRIAGE_AI_CONCURRENCY, 8),
-    startsPerMinute: positiveInteger(env.TRIAGE_AI_STARTS_PER_MINUTE, 30),
-    httpTimeoutMs: positiveInteger(env.TRIAGE_HTTP_TIMEOUT_MS, 60_000),
-    liveDurationMs: positiveInteger(env.TRIAGE_LIVE_DURATION_MS, 300_000),
-    setupTimeoutMs: positiveInteger(env.TRIAGE_LIVE_SETUP_TIMEOUT_MS, 15_000),
-    maxPayload: positiveInteger(env.TRIAGE_MAX_PAYLOAD_BYTES, 262_144),
-    messagesPerSecond: positiveInteger(env.TRIAGE_LIVE_MESSAGES_PER_SECOND, 100),
+    enabled: env.AUTI_AI_ENABLED !== 'false', origins,
+    concurrency: positiveInteger(env.AUTI_AI_CONCURRENCY, 8),
+    startsPerMinute: positiveInteger(env.AUTI_AI_STARTS_PER_MINUTE, 30),
+    liveDurationMs: positiveInteger(env.AUTI_LIVE_DURATION_MS, 300_000),
+    setupTimeoutMs: positiveInteger(env.AUTI_LIVE_SETUP_TIMEOUT_MS, 15_000),
+    maxPayload: positiveInteger(env.AUTI_MAX_PAYLOAD_BYTES, 262_144),
+    messagesPerSecond: positiveInteger(env.AUTI_LIVE_MESSAGES_PER_SECOND, 100),
   };
 }
 
-/** A shared per-process ceiling for HTTP and live AI use; no proxy/IP trust. */
+/** Teto por processo para sessões de voz em tempo real. */
 export class AiBudget {
   private active = 0;
   private starts: number[] = [];
@@ -45,44 +41,5 @@ export class AiBudget {
 export function isOriginAllowed(origin: string | undefined, origins: Set<string>): boolean {
   if (!origin) return false;
   if (origins.has(origin)) return true;
-  try {
-    const hostname = new URL(origin).hostname;
-    if (hostname === 'neoflowoff.agency' || hostname.endsWith('.neoflowoff.agency')) {
-      return true;
-    }
-  } catch {}
   return false;
-}
-
-export function guardAiHttp(limits: ReturnType<typeof aiLimits>, budget: AiBudget): RequestHandler {
-  return (req, res, next) => {
-    if (req.method !== 'POST') return next();
-    if (!limits.enabled) return void res.status(503).json({ error: 'Atendimento temporariamente indisponível.' });
-    if (!isOriginAllowed(req.headers.origin, limits.origins)) {
-      return void res.status(403).json({ error: 'Origem não permitida.' });
-    }
-    const release = budget.acquire();
-    if (!release) {
-      res.setHeader('Retry-After', '60');
-      return void res.status(429).json({ error: 'Atendimento ocupado. Tente novamente em instantes.' });
-    }
-    const controller = new AbortController();
-    res.locals.aiSignal = controller.signal;
-    const timer = setTimeout(() => {
-      controller.abort();
-      if (!res.headersSent) res.status(504).json({ error: 'Tempo de atendimento excedido.' });
-      else res.destroy();
-    }, limits.httpTimeoutMs);
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      clearTimeout(timer);
-      controller.abort();
-      release();
-    };
-    res.once('close', finish);
-    res.once('finish', finish);
-    next();
-  };
 }

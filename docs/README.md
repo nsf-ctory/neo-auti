@@ -1,28 +1,29 @@
-# Documentação do Módulo `neo-triage-agent` (`triage.neoflowoff.agency`)
+# Documentação do `neo-auti`
 
-Este diretório contém a documentação técnica, especificações de integração e orientações operacionais para o serviço **`neo-triage-agent`**, o agente de atendimento e triagem por voz do ecossistema **neøflow**.
+Este diretório reúne o contrato técnico e a identidade do Auti. dentro do
+workspace **Chat-as-a-Protocol**.
 
----
+## Fontes canônicas
 
-## Índice de Documentos
+1. [`skills/instructions/SKILL.md`](./skills/instructions/SKILL.md) — instrução
+   operacional principal.
+2. [`skills/AUTI_IDENTITY_BEHAVIOR_HUMANIZATION_SPEC_v0.8.1.md`](./skills/AUTI_IDENTITY_BEHAVIOR_HUMANIZATION_SPEC_v0.8.1.md)
+   — identidade, comportamento e critérios de aceitação.
+3. [`skills/instructions/references/adaptive-support-engine.md`](./skills/instructions/references/adaptive-support-engine.md)
+   — adaptação contextual, memória e consentimento.
+4. [`SETUP.md`](./SETUP.md) — execução local, variáveis e validação.
 
-1. **[Guia de Setup e Deploy (`SETUP.md`)](./SETUP.md):** Instruções de configuração local, variáveis de ambiente, integração com Google Gemini Live API e deploy no Railway.
-2. **[Documentação Principal do Nó (`../README.md`)](../README.md):** Visão geral do produto `>_ neøtiko`, funcionalidades de voz bidirecional em tempo real, multimodalidade e interface mobile-first.
+Os materiais em `skills/instructions/references` são referências do criador.
+Eles não devem ser promovidos automaticamente a validação clínica, política
+pública ou configuração ativa.
 
----
+## Contrato do runtime
 
-## Arquitetura & Endpoints Ativos em Produção
-
-- **Subdomínio Canônico:** `https://triage.neoflowoff.agency`
-- **WebSocket Live Voice:** `wss://triage.neoflowoff.agency`
-- **Backend Runtime:** Express + WebSocket (Node.js v22)
-- **Integração de IA:** Google Gemini Live API / Multimodal
-- **Storage Remoto:** Cloudflare R2 (`https://cdn.neoflowoff.agency`)
-
----
-
-## Diretivas para Dev Agents
-
-1. **Contrato de Origem & CSP:** Todo o tráfego WebSocket e chamadas de API devem ser permitidos pelos cabeçalhos CSP definidos em `server.ts` sob a origem `https://*.neoflowoff.agency`.
-2. **Defesa de Engenharia Social:** O prompt do agente em `src/data/presetPersonas.ts` e `src/utils/promptSynthesizer.ts` estabelece limites rígidos: chamadas de arquitetura ou engenharia devem ser direcionadas educadamente para `https://partners.neoflowoff.agency/tech`.
-3. **Imutabilidade de Credenciais:** Nunca expor `GEMINI_API_KEY`, secrets do R2 ou credenciais de produção em arquivos submetidos ao Git.
+- `auti-policy.ts` contém a projeção curta, pública e server-owned usada na voz.
+- A interface possui uma única ação: tocar em `ball_auti.png` para falar.
+- O frontend é não soberano: não define identidade, system prompt, modelo ou
+  provedor.
+- `GEMINI_API_KEY` é uma variável técnica do adaptador atual e nunca pode ir ao
+  navegador, logs, documentação preenchida ou Git.
+- Não há domínio, storage, deploy ou memória persistente confirmados para este
+  nó nesta migração.

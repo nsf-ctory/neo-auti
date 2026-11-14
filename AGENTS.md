@@ -1,57 +1,62 @@
-# AGENTS.md // NEO TRIAGE AGENT
+# AGENTS.md // NEO-AUTI
 
-> Contexto operacional e fronteiras de execução para o agente de triagem `>_ neøtiko` no módulo `neo-triage-agent`.
+> Contexto operacional do nó conversacional **Auti.** no ecossistema
+> **Chat-as-a-Protocol**.
 
----
+## Identidade e fonte canônica
 
-## ⟠ Princípio Norteador (NEØ PROTOCOL)
+- Nome do produto: **Auti.**
+- Nome do projeto, pacote e serviço: **`neo-auti`**
+- Missão: apoio cotidiano, acolhimento e autogestão cognitiva, especialmente
+  para adultos autistas, sem exigir diagnóstico ou laudo.
+- Antes de alterar comportamento conversacional, leia integralmente
+  `docs/skills/instructions/SKILL.md` e as referências indicadas para o tema.
+- `docs/skills/AUTI_IDENTITY_BEHAVIOR_HUMANIZATION_SPEC_v0.8.1.md` é a
+  especificação portátil de identidade e critérios de aceitação.
 
-1. **Provedor Invisível:**
-   - O frontend nunca expõe chaves, tokens, nem nomes comerciais de modelos e provedores subjacentes.
-   - Toda comunicação de inferência passa pelo servidor (`server.ts` Express / WebSocket).
+Auti. não é triagem comercial, terapia, diagnóstico, serviço de emergência nem
+motor de produtividade. Não restaurar conteúdo herdado de Shop, Creators,
+Marketing, TikTok Partner, `>_ neøtiko` ou neøflow.
 
-2. **Propósito Canônico de Triagem:**
-   - O papel do agente `>_ neøtiko` é qualificar e rotear visitantes para os 4 territórios oficiais:
-     - `01 // SHOP`: Lojistas e marcas com CNPJ ativo e conta aprovada no TikTok Shop Seller Center.
-     - `02 // CREATORS`: Criadores de conteúdo, afiliados e streamers.
-     - `03 // MARKETING`: Gestão de tráfego, criativos oficiais (Symphony) e mídia paga.
-     - `04 // TECH`: Desenvolvedores, APIs, webhooks e integradores de ERP/WMS.
+## Arquitetura
 
-3. **Qualificação Inegociável de Sellers:**
-   - Todo lojista deve ser questionado sobre a posse de **CNPJ ativo** e **conta aprovada no TikTok Shop Seller Center** com estoque nacional e NF-e.
-   - Quem já possui os requisitos é direcionado para `/sellers/conectar`.
-   - Quem ainda não possui loja aprovada é orientado a abrir cadastro no portal oficial (`https://seller-br.tiktok.com`).
+- O frontend é não soberano.
+- Identidade e limites efetivos ficam no servidor em `auti-policy.ts`.
+- O navegador nunca escolhe modelo, envia system prompt efetivo ou recebe
+  credenciais e nomes de provedores subjacentes.
+- A experiência pública é exclusivamente uma chamada de voz por WebSocket.
+- O frontend mostra somente `ball_auti.png`; tocar inicia a chamada. Não
+  adicionar chat, mensagem gravada, menus, descrições ou texto visível.
+- Preferências locais não equivalem a memória persistente.
+- Nós do workspace integram por contratos; não importar arquivos de outro nó.
 
-4. **Runtime & Gestão de Pacotes:**
-   - Node.js gerenciado via `fnm`.
-   - Gerenciador canônico do workspace: `pnpm` (baseline `pnpm@10.33.0` com `"engines": ">=10"`).
-   - Segredos protegidos: `GEMINI_API_KEY` reside em ambiente seguro / `.env` protegido por `.gitignore`.
+## Runtime e segurança
 
-5. **Infraestrutura, Remotos e Storage Remoto:**
-   - **Domínio Público Escolhido:** `https://triage.neoflowoff.agency` (runtime novo precisa validação antes de ser declarado operacional).
-   - **Git Remoto Canônico:** Publicar pelo `origin` HTTPS em
-     `github.com/neoflow-partners/neo-triage-agent.git`. `gitea-legacy` é
-     espelho histórico e não recebe push padrão.
-   - **Deploy Autônomo:** Executado via `Dockerfile` com BuildKit no Railway (`railway up . --path-as-root --service neo-triage-agent -e production`).
-   - **Object Storage & Mídia (Cloudflare R2):** Anexos, imagens e mídias de chat utilizam o bucket `neotiktok` via S3 API (`https://58d7464a80ebdab70f60846076efe203.r2.cloudflarestorage.com`) com CDN escolhida em `https://cdn.neoflowoff.agency`.
+- Node.js 22 e `pnpm@10.33.0`.
+- `GEMINI_API_KEY` é segredo server-side do adaptador atual. Verificar somente
+  existência e nome; nunca revelar valor.
+- Variáveis públicas do nó usam prefixo `AUTI_`.
+- Em produção, `AUTI_ALLOWED_ORIGINS` é obrigatório e exato.
+- Toda automação deve ter desligamento por `AUTI_AI_ENABLED=false`.
+- Não prometer memória, privacidade, plano, preço, domínio ou disponibilidade
+  sem capacidade e evidência verificadas.
 
-6. **Padrão Canônico de Estilização (Tailwind CSS v4):**
-   - Obedecer integralmente a `_standards/TAILWIND_V4_STANDARDS.md`.
-   - **Sintaxe v4 obrigatória:** Utilizar `bg-linear-to-*` em vez de `bg-gradient-to-*`.
-   - **Escala métrica nativa vs. Colchetes:** Proibido o uso de classes arbitrárias `[Npx]` para valores existentes na escala do Tailwind (ex: usar `min-h-11` em vez de `min-h-[44px]`, `min-h-9` em vez de `min-h-[36px]`, `min-h-10` para `40px`, `min-h-12.5` para `50px`).
-   - **Paleta Canônica:** `#0b0b0c`, `#050505`, `#121214`, `zinc-*`, `#fe2c55`, `#00f2fe`, `#d7fe09`, `#9bb7c3`. Zero tolerância para cores legadas (`stone-*`, `purple-*`, etc.).
+## Publicação
 
-## Contrato operacional de publicação
+O diretório está sob a organização de workspace `Chat-as-a-Protocol`, mas isso
+não comprova repositório remoto, domínio ou serviço implantado. Os remotos Git e
+o histórico herdados de `neo-triage-agent` são legados até substituição
+explícita. Não executar push ou deploy sem destino e autorização específicos.
 
-Antes de modificar ou publicar este serviço, leia
-`../flowoff-tiktok-control-plane/STATE.md`,
-`../flowoff-tiktok-control-plane/DECISIONS.md`,
-`../flowoff-tiktok-control-plane/docs/operations/PRODUCTION-RUNBOOK.md` e
-`../flowoff-tiktok-control-plane/docs/operations/DEPLOY-SPEC.md`. Identifique
-o runtime efetivo e o escopo autorizado; o deploy `d798de6` comprovou somente
-a publicação do frontend.
+## Validação
 
-Não extrapole o procedimento de `front` para triage sem uma validação própria.
-Preserve secrets e dependências, valide build/health compatíveis, registre
-commit, imagem, container e horário quando houver publicação autorizada e
-mantenha separados push, deploy, health e E2E.
+Após alterações técnicas:
+
+```bash
+pnpm lint
+pnpm test
+pnpm build
+git diff --check
+```
+
+Revisar `git status`, diff e possíveis segredos antes de concluir.

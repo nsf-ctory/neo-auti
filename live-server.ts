@@ -56,8 +56,6 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
                   },
                 },
                 systemInstruction: publicInstruction,
-                outputAudioTranscription: {},
-                inputAudioTranscription: {},
               },
               callbacks: {
                 onmessage: (message: LiveServerMessage) => {
@@ -69,19 +67,11 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
                   const interrupted = message.serverContent?.interrupted;
                   const turnComplete = message.serverContent?.turnComplete;
 
-                  // Transcriptions if emitted
-                  const outputTranscription = (message.serverContent as any)
-                    ?.outputAudioTranscription?.text;
-                  const inputTranscription = (message.serverContent as any)
-                    ?.inputAudioTranscription?.text;
-
                   clientWs.send(
                     JSON.stringify({
                       audio,
                       interrupted,
                       turnComplete,
-                      outputTranscription,
-                      inputTranscription,
                     })
                   );
                 },

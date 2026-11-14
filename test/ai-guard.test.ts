@@ -2,14 +2,13 @@ import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { createServer } from 'node:http';
 import { test } from 'node:test';
-import express from 'express';
 import { WebSocket } from 'ws';
-import { aiLimits, AiBudget, guardAiHttp } from '../ai-guard';
+import { aiLimits, AiBudget } from '../ai-guard';
 import { installLiveServer } from '../live-server';
 
-const origin = 'https://triage.neoflowoff.agency';
+const origin = 'https://auti.example.test';
 function limits(extra = {}) {
-  return { ...aiLimits({ NODE_ENV: 'production' }), ...extra };
+  return { ...aiLimits({ NODE_ENV: 'production', AUTI_ALLOWED_ORIGINS: origin }), ...extra };
 }
 async function fixture(t: any, config: ReturnType<typeof limits>, connect: (...args: any[]) => Promise<any>) {
   const server = createServer();
@@ -35,23 +34,6 @@ test('budget caps starts and concurrency; release is idempotent and window expir
   assert.equal(budget.acquire(), undefined);
   now = 60001; assert.ok(budget.acquire());
   assert.equal(new AiBudget(limits({ enabled: false })).acquire(), undefined);
-});
-
-test('HTTP rejects missing/foreign origin before provider, limits calls and aborts on deadline', async t => {
-  const config = limits({ startsPerMinute: 1, httpTimeoutMs: 30 });
-  const app = express();
-  let signal: AbortSignal | undefined;
-  app.use('/api', guardAiHttp(config, new AiBudget(config)));
-  app.post('/api/tts', (_req, res) => { signal = res.locals.aiSignal; });
-  const server = app.listen(0, '127.0.0.1'); await once(server, 'listening');
-  t.after(() => { server.closeAllConnections(); server.close(); });
-  const url = `http://127.0.0.1:${(server.address() as any).port}/api/tts`;
-  assert.equal((await fetch(url, { method: 'POST' })).status, 403);
-  assert.equal((await fetch(url, { method: 'POST', headers: { origin: 'https://evil.invalid' } })).status, 403);
-  assert.equal(signal, undefined);
-  assert.equal((await fetch(url, { method: 'POST', headers: { origin } })).status, 504);
-  assert.equal(signal?.aborted, true);
-  assert.equal((await fetch(url, { method: 'POST', headers: { origin } })).status, 429);
 });
 
 test('WebSocket rejects foreign origin without starting a provider session', async t => {

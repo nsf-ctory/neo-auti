@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════
-#   NΞØ Protocol — neo-triage-agent
-#   Makefile Canônico · Agente >_ neøtiko
+#   Chat-as-a-Protocol — neo-auti
+#   Makefile local · Auti.
 # ═══════════════════════════════════════════
 
 SHELL := /bin/sh
@@ -15,7 +15,7 @@ WHITE   := \033[1;37m
 RESET   := \033[0m
 
 .DEFAULT_GOAL := help
-.PHONY: help check-node install repair clean dev build start preview lint doctor verify deploy
+.PHONY: help check-node install repair clean dev build start preview lint doctor verify
 
 # ─── HELP ────────────────────────────────────────────────────────────────────
 
@@ -23,8 +23,8 @@ help: ## Exibe os comandos disponíveis
 	@printf "$(CYAN)╔══════════════════════════════════════════╗$(RESET)\n"
 	@printf "$(CYAN)║$(MAGENTA)▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓$(CYAN)║$(RESET)\n"
 	@printf "$(CYAN)║                                          ║$(RESET)\n"
-	@printf "$(CYAN)║$(RESET)       $(WHITE)neøflow · TRIAGE AGENT$(RESET)             $(CYAN)║$(RESET)\n"
-	@printf "$(CYAN)║$(RESET)      $(MAGENTA)── Agente >_ neøtiko v1.0.0 ──$(RESET)       $(CYAN)║$(RESET)\n"
+	@printf "$(CYAN)║$(RESET)             $(WHITE)AUTI.$(RESET)                        $(CYAN)║$(RESET)\n"
+	@printf "$(CYAN)║$(RESET)       $(MAGENTA)── apoio e autonomia ──$(RESET)             $(CYAN)║$(RESET)\n"
 	@printf "$(CYAN)║                                          ║$(RESET)\n"
 	@printf "$(CYAN)║$(MAGENTA)▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓$(CYAN)║$(RESET)\n"
 	@printf "$(CYAN)╚══════════════════════════════════════════╝$(RESET)\n"
@@ -45,23 +45,23 @@ help: ## Exibe os comandos disponíveis
 	  | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[0;36m◆ %-16s\033[0m \033[0;90m%s\033[0m\n", $$1, $$2}'
 	@printf "\n"
 	@printf "$(DIM) ─────────────────────────────────────────────$(RESET)\n"
-	@printf "$(DIM) ⬡ NΞØ Protocol · neøflow Triage Agent (>_ neøtiko)$(RESET)\n"
+	@printf "$(DIM) ⬡ Chat-as-a-Protocol · neo-auti$(RESET)\n"
 	@printf "\n"
 
 # ─── AMBIENTE ────────────────────────────────────────────────────────────────
 
-check-node: ## Valida versão do ambiente Node.js (>= 20)
+check-node: ## Valida versão do ambiente Node.js (>= 22)
 	@printf "$(CYAN)╭──────────────────────────────────────────╮$(RESET)\n"
 	@printf "$(CYAN)│$(RESET)  $(WHITE)◉  CHECK-NODE$(RESET)%-27s$(CYAN)│$(RESET)\n" ""
 	@printf "$(CYAN)╰──────────────────────────────────────────╯$(RESET)\n"
-	@node -e 'const v=process.versions.node.split(".")[0]; if(parseInt(v)<20){console.error("Node >= 20 required"); process.exit(1);}'
+	@node -e 'const v=process.versions.node.split(".")[0]; if(parseInt(v)<22){console.error("Node >= 22 required"); process.exit(1);}'
 	@printf "$(GREEN)  ✓ Node.js $$(node -v) validado.$(RESET)\n"
 
 install: check-node ## Instala dependências com pnpm
 	@printf "$(CYAN)╭──────────────────────────────────────────╮$(RESET)\n"
 	@printf "$(CYAN)│$(RESET)  $(WHITE)▼  INSTALL$(RESET)%-31s$(CYAN)│$(RESET)\n" ""
 	@printf "$(CYAN)╰──────────────────────────────────────────╯$(RESET)\n"
-	@pnpm install
+	@pnpm install --frozen-lockfile
 	@printf "$(GREEN)  ✓ Dependências instaladas com sucesso.$(RESET)\n"
 
 repair: ## Reinstala dependências do zero
@@ -136,10 +136,3 @@ doctor: ## Diagnóstico de ambiente, variáveis e dependências
 
 verify: lint build ## Validação completa da esteira CI/CD local (typecheck + build)
 	@printf "$(GREEN)  ✓ Todas as verificações de qualidade foram aprovadas com sucesso!$(RESET)\n"
-
-deploy: verify ## Executa build e envia deploy para produção no Railway
-	@printf "$(CYAN)╭──────────────────────────────────────────╮$(RESET)\n"
-	@printf "$(CYAN)│$(RESET)  $(WHITE)🚀 DEPLOY (RAILWAY)$(RESET)%-23s$(CYAN)│$(RESET)\n" ""
-	@printf "$(CYAN)╰──────────────────────────────────────────╯$(RESET)\n"
-	@railway up --service neo-triage-agent -e production -d
-	@printf "$(GREEN)  ✓ Deploy disparado com sucesso para Railway (neo-triage-agent)!$(RESET)\n"

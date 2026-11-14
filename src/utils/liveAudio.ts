@@ -1,4 +1,4 @@
-// Audio tools for Gemini Live API (16kHz mic input, 24kHz speaker playback)
+// Audio tools for the server-side live voice channel (16kHz input, 24kHz output).
 
 export function floatTo16BitPCM(input: Float32Array): Int16Array {
   const output = new Int16Array(input.length);

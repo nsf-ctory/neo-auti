@@ -1,286 +1,72 @@
-# Guia Técnico de Setup: Frontend Astro + Backend API Separados
+# Setup e operação do `neo-auti`
 
-Este documento detalha como estruturar, desenvolver e colocar em produção a arquitetura **Opção B: Frontend Astro + Backend API Separados**, utilizando **pnpm workspaces** e deploy no **Railway**.
+## Requisitos
 
----
+- Node.js `>=22.12.0` (o repositório fixa a linha 22 em `.node-version`).
+- `pnpm@10.33.0` via Corepack, `fnm` ou gerenciador equivalente.
+- Credencial server-side do adaptador de inferência atual.
 
-## 1. Visão Geral da Arquitetura
+## Configuração
 
-```text
-               ┌────────────────────────────────────────┐
-               │         Frontend (Astro + React)       │
-               │  - Páginas estáticas / SSR no Astro    │
-               │  - Ilhas interativas (Chat, Sliders)   │
-               │  - Audio visualizer & WebSocket client │
-               └───────────────────┬────────────────────┘
-                                   │
-              HTTP REST + SSE      │   WebSocket Bidirecional (Live)
-              (/api/chat/stream, /api/tts)│   (/api/live - PCM 16/24kHz)
-                                   ▼
-               ┌────────────────────────────────────────┐
-               │          Backend API (Node.js)         │
-               │  - Express + WebSocketServer (ws)      │
-               │  - SDK @google/genai (server-side)     │
-               │  - Sessões Live (gemini-3.1-flash-live)│
-               │  - TTS & Transcrição de áudio          │
-               └───────────────────┬────────────────────┘
-                                   │
-                                   ▼
-               ┌────────────────────────────────────────┐
-               │           Google Gemini API            │
-               │  - Live API (Audio I/O)                │
-               │  - Gemini 3.8 Flash / 3.1 Pro          │
-               └────────────────────────────────────────┘
+```bash
+cp .env.example .env
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
----
+O servidor usa a porta `3000` por padrão. Em desenvolvimento, origens
+`http://localhost:3000` e `http://127.0.0.1:3000` são aceitas automaticamente.
 
-## 2. Estrutura do Repositório (Monorepo pnpm)
+## Variáveis
 
-```text
-meu-projeto/
-├── pnpm-workspace.yaml
-├── package.json
-├── docs/
-│   └── SETUP.md
-├── README.md
-├── apps/
-│   ├── api/                    # Backend API & WebSocket
-│   │   ├── package.json
-│   │   ├── tsconfig.json
-│   │   └── src/
-│   │       ├── server.ts       # Express + WSS + @google/genai
-│   │       └── routes/
-│   └── web/                    # Frontend Astro
-│       ├── package.json
-│       ├── astro.config.mjs
-│       ├── tsconfig.json
-│       ├── src/
-│       │   ├── layouts/
-│       │   │   └── BaseLayout.astro
-│       │   ├── pages/
-│       │   │   └── index.astro
-│       │   └── components/     # Ilhas React
-│       │       ├── ChatApp.tsx
-│       │       ├── LiveVoiceModal.tsx
-│       │       └── PersonaEditor.tsx
-```
-
----
-
-## 3. Configuração do Monorepo (`pnpm`)
-
-`pnpm-workspace.yaml` (na raiz)
-
-```yaml
-packages:
-  - 'apps/*'
-```
-
-### `package.json` (raiz)
-
-```json
-{
-  "name": "persona-studio-monorepo",
-  "private": true,
-  "scripts": {
-    "dev:api": "pnpm --filter api dev",
-    "dev:web": "pnpm --filter web dev",
-    "dev": "pnpm --parallel dev",
-    "build": "pnpm --recursive run build"
-  }
-}
-```
-
----
-
-## 4. Backend API (`apps/api`)
-
-### `apps/api/package.json`
-
-```json
-{
-  "name": "api",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
-    "start": "node dist/server.js"
-  },
-  "dependencies": {
-    "@google/genai": "^2.4.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
-    "ws": "^8.18.0"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^22.14.0",
-    "@types/ws": "^8.5.14",
-    "esbuild": "^0.25.0",
-    "tsx": "^4.21.0",
-    "typescript": "^5.8.2"
-  }
-}
-```
-
-### Destaques do Servidor (`apps/api/src/server.ts`)
-
-- Servidor HTTP nativo acoplado ao `WebSocketServer` na rota `/api/live`.
-- Suporte a CORS para permitir conexões do domínio do Astro em produção e desenvolvimento.
-- Conexão com `@google/genai` usando `ai.live.connect` para streaming de áudio bidirecional em tempo real (16kHz PCM input, 24kHz PCM output).
-
----
-
-## 5. Frontend Astro (`apps/web`)
-
-### `apps/web/package.json`
-
-```json
-{
-  "name": "web",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
-  },
-  "dependencies": {
-    "@astrojs/react": "^4.2.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "astro": "^5.0.0",
-    "lucide-react": "^0.546.0",
-    "motion": "^12.23.24",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwindcss": "^3.4.1"
-  }
-}
-```
-
-### `apps/web/astro.config.mjs`
-
-```javascript
-import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
-
-export default defineConfig({
-  integrations: [react(), tailwind()],
-  server: {
-    port: 4321
-  }
-});
-```
-
-### `apps/web/src/pages/index.astro`
-
-```astro
----
-import BaseLayout from '../layouts/BaseLayout.astro';
-import App from '../components/App.tsx';
----
-
-<BaseLayout title="Persona Studio">
-  <!-- A ilha interativa é hidratada no cliente para áudio e WebSockets -->
-  <App client:load />
-</BaseLayout>
-```
-
----
-
-## 6. Variáveis de Ambiente
-
-### `apps/api/.env`
-
-```env
-PORT=3000
-GEMINI_API_KEY=sua_chave_aqui
-ALLOWED_ORIGIN=http://localhost:4321
-```
-
-### `apps/web/.env`
-
-```env
-PUBLIC_API_URL=http://localhost:3000
-PUBLIC_WS_URL=ws://localhost:3000
-```
-
----
-
-## 7. Deploy no Railway
-
-O Railway possui suporte nativo a monorepos e containers Node.js persistentes com WebSockets:
-
-### Serviço 1: Backend (`apps/api`)
-
-1. Crie um novo serviço no Railway a partir do seu repositório GitHub.
-2. Nas configurações do serviço (**Settings**):
-   - **Root Directory**: `apps/api`
-   - **Build Command**: `pnpm install && pnpm run build`
-   - **Start Command**: `pnpm run start`
-3. Em **Variables**:
-   - `GEMINI_API_KEY`: sua chave de API do Gemini.
-   - `PORT`: `3000` (ou deixe o Railway definir automaticamente via `$PORT`).
-   - `ALLOWED_ORIGIN`: URL do seu frontend Astro gerada no Railway.
-4. Em **Networking**, clique em **Generate Domain** (ex: `api-production.up.railway.app`).
-
-### Serviço 2: Frontend (`apps/web`)
-
-1. Adicione um segundo serviço no mesmo projeto do Railway a partir do mesmo repositório.
-2. Nas configurações (**Settings**):
-   - **Root Directory**: `apps/web`
-   - **Build Command**: `pnpm install && pnpm run build`
-   - **Start Command**: `pnpm run preview --host 0.0.0.0 --port $PORT` (ou use `@astrojs/node` para SSR).
-3. Em **Variables**:
-   - `PUBLIC_API_URL`: `https://api-production.up.railway.app`
-   - `PUBLIC_WS_URL`: `wss://api-production.up.railway.app`
-4. Em **Networking**, gere o domínio público para seu frontend Astro.
-
----
-
-## 8. Persistência de Dados no Railway (Opcional)
-
-Se desejar persistir histórico de conversas e personas além do `localStorage` do navegador:
-
-1. No painel do projeto no Railway, clique em **New > Database > PostgreSQL**.
-2. Conecte sua `apps/api` ao banco usando a variável `DATABASE_URL` injetada automaticamente pelo Railway.
-3. Utilize um ORM leve como **Drizzle ORM** ou **Prisma** para salvar as mensagens e personas dos usuários.
-
-## Controles de consumo da triagem — 2026-09-17
-
-O atendimento permanece público. A aplicação valida Origin nos POSTs `/api/*`
-e no WebSocket `/api/live`, antes de chamar o provedor. Origin não autentica
-clientes fora do navegador; o limite global de consumo é uma proteção adicional.
-Não confiar em `X-Forwarded-For` ou `CF-Connecting-IP` enviados pelo cliente.
-
-| Variável | Padrão | Efeito |
+| Variável | Padrão | Função |
 | --- | --- | --- |
-| `TRIAGE_AI_ENABLED` | habilitado | `false` bloqueia novos atendimentos sem afetar health/static. Sessões existentes terminam pelo limite de duração. |
-| `TRIAGE_ALLOWED_ORIGINS` | `https://triage.neoflowoff.agency,https://partners.neoflowoff.agency` | Lista exata de origens, separada por vírgula. Ausência de Origin é rejeitada. |
-| `TRIAGE_AI_CONCURRENCY` | 8 | Teto compartilhado HTTP/live por processo. |
-| `TRIAGE_AI_STARTS_PER_MINUTE` | 30 | Novos atendimentos por janela móvel de 60 segundos, por processo. |
-| `TRIAGE_HTTP_TIMEOUT_MS` | 60000 | Deadline HTTP com AbortSignal enviado ao SDK. |
-| `TRIAGE_LIVE_DURATION_MS` | 300000 | Duração máxima da conexão live. |
-| `TRIAGE_LIVE_SETUP_TIMEOUT_MS` | 15000 | Prazo para abrir a sessão do provedor. |
-| `TRIAGE_MAX_PAYLOAD_BYTES` | 262144 | Limite de cada mensagem WebSocket. |
-| `TRIAGE_LIVE_MESSAGES_PER_SECOND` | 100 | Limite de mensagens por conexão. |
-| `TRIAGE_CHAT_MODEL` | modelo já utilizado pelo servidor | Modelo de chat sob controle do servidor; parâmetros públicos de modelo, thinking e grounding não selecionam recursos adicionais. |
+| `GEMINI_API_KEY` | obrigatório | Credencial server-side do adaptador atual. |
+| `PORT` | `3000` | Porta HTTP e WebSocket. |
+| `AUTI_AI_ENABLED` | habilitado | `false` impede novas sessões de inferência. |
+| `AUTI_ALLOWED_ORIGINS` | vazio em produção | Origens públicas exatas, separadas por vírgula. |
+| `AUTI_AI_CONCURRENCY` | `8` | Sessões de voz simultâneas por processo. |
+| `AUTI_AI_STARTS_PER_MINUTE` | `30` | Novas sessões por minuto e por processo. |
+| `AUTI_LIVE_DURATION_MS` | `300000` | Duração máxima de uma conversa de voz. |
+| `AUTI_LIVE_SETUP_TIMEOUT_MS` | `15000` | Prazo para iniciar a sessão de voz. |
+| `AUTI_MAX_PAYLOAD_BYTES` | `262144` | Limite de cada mensagem WebSocket. |
+| `AUTI_LIVE_MESSAGES_PER_SECOND` | `100` | Limite de mensagens por conexão. |
 
-JSON HTTP limitado a 2 MB. Chat limitado a 2048 tokens de saída. Erros do
-provedor não são devolvidos nem registrados integralmente. Setup live é aceito
-uma única vez; conexões tardias são encerradas se o visitante já saiu. Uma
-conexão pendente mantém sua vaga até resolver, evitando liberar concorrência
-antes de encerrar a abertura do recurso externo.
+Em produção, `AUTI_ALLOWED_ORIGINS` deve ser definido explicitamente. Uma lista
+vazia rejeita chamadas de IA e evita publicar acidentalmente um endpoint aberto.
 
-Limites são locais ao processo e reiniciam com ele. Réplicas multiplicam o teto;
-esta entrega não modifica WAF, quotas da conta ou autenticação. Não é um teto
-financeiro global. Em desenvolvimento são aceitos também localhost/127.0.0.1
-na porta 3000. Para outras portas, configurar `TRIAGE_ALLOWED_ORIGINS`.
+## Endpoints
 
-Validação local: `pnpm test`, `pnpm lint`, `pnpm build`. Os testes usam HTTP e
-WebSocket reais locais com provedor simulado, sem consumo de IA ou credenciais.
+| Rota | Método | Uso |
+| --- | --- | --- |
+| `/api/health` | `GET` | Saúde do processo; não prova inferência nem voz. |
+| `/api/live` | WebSocket | Conversa de voz bidirecional. |
+
+## Segurança e dados
+
+- Não coloque segredos em variáveis `VITE_*` nem no bundle do frontend.
+- O navegador não envia modelo nem system prompt.
+- Origin reduz abuso no navegador, mas não autentica clientes fora dele.
+- Os limites são locais ao processo; múltiplas réplicas multiplicam o teto.
+- A aplicação atual não implementa banco, conta, billing, storage remoto nem
+  memória entre conversas.
+- Conteúdo de conversa é enviado ao adaptador de inferência configurado; termos
+  e política de privacidade devem refletir o tratamento real antes de publicar.
+
+## Validação
+
+```bash
+pnpm lint
+pnpm test
+pnpm build
+git diff --check
+```
+
+Os testes usam provedores simulados e não consomem credenciais reais.
+
+## Deploy
+
+O `Dockerfile` produz um único serviço Node com frontend estático, HTTP e
+WebSocket. Esta cópia não possui destino de produção confirmado. Antes de
+publicar, defina serviço, domínio, origem permitida, health check, rollback e
+tratamento de dados; valide push, deploy, health e E2E como evidências separadas.
