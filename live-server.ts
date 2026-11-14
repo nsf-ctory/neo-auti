@@ -1,48 +1,89 @@
-import { Modality, type GoogleGenAI, type LiveServerMessage } from '@google/genai';
+import {
+  Modality,
+  type GoogleGenAI,
+  type LiveServerMessage,
+} from '@google/genai';
 import type { Server } from 'node:http';
 import { WebSocket, WebSocketServer } from 'ws';
 import { AiBudget, aiLimits, isOriginAllowed } from './ai-guard';
 
-export function installLiveServer(httpServer: Server, limits: ReturnType<typeof aiLimits>,
-  aiBudget: AiBudget, getGeminiClient: () => GoogleGenAI, publicInstruction: string) {
+export function installLiveServer(
+  httpServer: Server,
+  limits: ReturnType<typeof aiLimits>,
+  aiBudget: AiBudget,
+  getGeminiClient: () => GoogleGenAI,
+  publicInstruction: string
+) {
   const wss = new WebSocketServer({
-    server: httpServer, path: '/api/live', maxPayload: limits.maxPayload,
-    verifyClient: ({ origin }) => limits.enabled && isOriginAllowed(origin, limits.origins),
+    server: httpServer,
+    path: '/api/live',
+    maxPayload: limits.maxPayload,
+    verifyClient: ({ origin }) =>
+      limits.enabled && isOriginAllowed(origin, limits.origins),
   });
 
   wss.on('connection', (clientWs: WebSocket) => {
     const release = aiBudget.acquire();
-    if (!release) { clientWs.close(1013, 'Atendimento ocupado.'); return; }
+    if (!release) {
+      clientWs.close(1013, 'Atendimento ocupado.');
+      return;
+    }
     let session: any = null;
     let isClosed = false;
     let setupStarted = false;
     let setupPending = false;
     let messageWindow = Date.now();
     let messages = 0;
-    const setupTimer = setTimeout(() => clientWs.terminate(), limits.setupTimeoutMs);
-    const durationTimer = setTimeout(() => clientWs.terminate(), limits.liveDurationMs);
+    const setupTimer = setTimeout(
+      () => clientWs.terminate(),
+      limits.setupTimeoutMs
+    );
+    const durationTimer = setTimeout(
+      () => clientWs.terminate(),
+      limits.liveDurationMs
+    );
     clientWs.on('error', () => clientWs.terminate());
 
     clientWs.on('message', async (raw) => {
       try {
         if (isClosed) return;
-        if (Date.now() - messageWindow >= 1000) { messageWindow = Date.now(); messages = 0; }
-        if (++messages > limits.messagesPerSecond) { clientWs.terminate(); return; }
+        if (Date.now() - messageWindow >= 1000) {
+          messageWindow = Date.now();
+          messages = 0;
+        }
+        if (++messages > limits.messagesPerSecond) {
+          clientWs.terminate();
+          return;
+        }
         const msg = JSON.parse(raw.toString());
-        if (!msg || typeof msg !== 'object' || Array.isArray(msg)) { clientWs.terminate(); return; }
+        if (!msg || typeof msg !== 'object' || Array.isArray(msg)) {
+          clientWs.terminate();
+          return;
+        }
 
         if (msg.setup) {
-          if (setupStarted) { clientWs.terminate(); return; }
+          if (setupStarted) {
+            clientWs.terminate();
+            return;
+          }
           setupStarted = true; // Reserve before awaiting the provider connection.
           if (typeof msg.setup !== 'object') {
-            clientWs.terminate(); return;
+            clientWs.terminate();
+            return;
           }
-          const { voice = 'Kore' } = msg.setup;
+          const { voice = 'Charon' } = msg.setup;
           const ai = getGeminiClient();
-          const allowedVoices = new Set(['Kore', 'Puck', 'Fenrir', 'Zephyr', 'Charon']);
-          const selectedVoice = typeof voice === 'string' && allowedVoices.has(voice)
-            ? voice
-            : 'Kore';
+          const allowedVoices = new Set([
+            'Kore',
+            'Puck',
+            'Fenrir',
+            'Zephyr',
+            'Charon',
+          ]);
+          const selectedVoice =
+            typeof voice === 'string' && allowedVoices.has(voice)
+              ? voice
+              : 'Kore';
 
           setupPending = true;
           try {
@@ -59,7 +100,8 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
               },
               callbacks: {
                 onmessage: (message: LiveServerMessage) => {
-                  if (isClosed || clientWs.readyState !== WebSocket.OPEN) return;
+                  if (isClosed || clientWs.readyState !== WebSocket.OPEN)
+                    return;
 
                   const audio =
                     message.serverContent?.modelTurn?.parts?.[0]?.inlineData
@@ -81,22 +123,28 @@ export function installLiveServer(httpServer: Server, limits: ReturnType<typeof 
                   }
                 },
                 onerror: () => {
-                  console.error(JSON.stringify({ event: 'live_provider_error' }));
+                  console.error(
+                    JSON.stringify({ event: 'live_provider_error' })
+                  );
                   if (!isClosed && clientWs.readyState === WebSocket.OPEN) {
                     clientWs.send(
-                      JSON.stringify({ error: 'Falha temporária no atendimento.' })
+                      JSON.stringify({
+                        error: 'Falha temporária no atendimento.',
+                      })
                     );
                   }
                 },
               },
             });
-
           } finally {
             setupPending = false;
             if (isClosed) release();
           }
           clearTimeout(setupTimer);
-          if (isClosed) { session.close(); return; }
+          if (isClosed) {
+            session.close();
+            return;
+          }
           clientWs.send(JSON.stringify({ ready: true }));
           return;
         }
