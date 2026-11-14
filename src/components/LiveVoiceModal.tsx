@@ -1,5 +1,6 @@
 import { Mic, MicOff, PhoneOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import {
   LiveAudioPlayer,
   floatTo16BitPCM,
@@ -126,23 +127,18 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
 
   if (!isOpen) return null;
 
-  const glow = status === 'error'
-    ? 'bg-red-500/25'
-    : status === 'speaking'
-      ? 'bg-fuchsia-400/30'
-      : 'bg-cyan-400/25';
+  const activity = Math.min(1, assistantVolume * 1.5 + userVolume * 0.35);
+  const orbStyle = {
+    '--auti-orb-scale': String(1 + activity * 0.085),
+    '--auti-halo-scale': String(1 + activity * 0.35),
+    '--auti-halo-opacity': String(0.4 + activity * 0.5),
+  } as CSSProperties;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
-      <div className="relative flex h-80 w-80 items-center justify-center sm:h-112 sm:w-112">
-        <div
-          className={`absolute rounded-full blur-3xl transition-all duration-150 ${glow}`}
-          style={{
-            width: `${210 + assistantVolume * 220 + userVolume * 80}px`,
-            height: `${210 + assistantVolume * 220 + userVolume * 80}px`,
-          }}
-        />
-        <img src="/ball_auti.png" alt="" className="relative h-full w-full object-contain" />
+      <div className={`auti-orb auti-orb--live ${status === 'error' ? 'auti-orb--error' : ''} relative flex h-80 w-80 items-center justify-center sm:h-112 sm:w-112`} style={orbStyle}>
+        <div className="auti-orb__halo" aria-hidden="true" />
+        <img src="/ball_auti.png" alt="" className="auti-orb__image" />
       </div>
 
       <div className="absolute bottom-10 flex items-center gap-6">

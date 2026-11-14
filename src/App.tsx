@@ -10,13 +10,13 @@ export default function App() {
         type="button"
         onClick={() => setIsLiveOpen(true)}
         aria-label="Iniciar chamada com Auti."
-        className="group relative flex h-72 w-72 items-center justify-center rounded-full outline-none sm:h-96 sm:w-96"
+        className="auti-orb group relative flex h-72 w-72 items-center justify-center rounded-full outline-none sm:h-96 sm:w-96"
       >
-        <span className="absolute inset-10 rounded-full bg-cyan-400/20 blur-3xl transition-transform duration-500 group-hover:scale-110 group-focus-visible:scale-110" />
+        <span className="auti-orb__halo" aria-hidden="true" />
         <img
           src="/ball_auti.png"
           alt=""
-          className="relative h-full w-full object-contain transition-transform duration-300 group-active:scale-95"
+          className="auti-orb__image"
         />
       </button>
 
