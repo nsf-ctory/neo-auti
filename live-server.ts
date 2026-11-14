@@ -18,8 +18,8 @@ export function installLiveServer(
     server: httpServer,
     path: '/api/live',
     maxPayload: limits.maxPayload,
-    verifyClient: ({ origin }) =>
-      limits.enabled && isOriginAllowed(origin, limits.origins),
+    verifyClient: (info: { origin: string }) =>
+      limits.enabled && isOriginAllowed(info.origin, limits.origins),
   });
 
   wss.on('connection', (clientWs: WebSocket) => {
