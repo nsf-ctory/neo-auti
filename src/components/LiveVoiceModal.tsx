@@ -84,7 +84,7 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
     const ws = new WebSocket(`${protocol}//${window.location.host}/api/live`);
     wsRef.current = ws;
 
-    ws.onopen = () => ws.send(JSON.stringify({ setup: { voice: 'Kore' } }));
+    ws.onopen = () => ws.send(JSON.stringify({ setup: { voice: 'Charon' } }));
     ws.onmessage = (event) => {
       if (!active) return;
       try {
