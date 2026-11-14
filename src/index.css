@@ -26,3 +26,13 @@ html.dark {
   color-scheme: dark;
   background-color: var(--neo-bg);
 }
+
+@keyframes auti-breathe { 0%,100% {transform:scale(.97);opacity:.65} 50% {transform:scale(1.06);opacity:1} }
+@keyframes auti-halo { 0%,100% {transform:scale(.9);opacity:.35} 50% {transform:scale(1.13);opacity:.8} }
+.auti-orb { isolation:isolate; }
+.auti-orb__halo {position:absolute;inset:12%;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(172,236,255,.25),rgba(173,151,255,.16) 42%,rgba(247,165,225,.12) 58%,transparent 74%);filter:blur(26px);animation:auti-halo 5.6s ease-in-out infinite;}
+.auti-orb__image {position:relative;width:100%;height:100%;object-fit:contain;animation:auti-breathe 5.6s ease-in-out infinite;}
+.auti-orb--live .auti-orb__image {animation:none;transform:scale(var(--auti-orb-scale,1));transition:transform 120ms ease-out;}
+.auti-orb--live .auti-orb__halo {animation:none;transform:scale(var(--auti-halo-scale,1));opacity:var(--auti-halo-opacity,.6);transition:transform 160ms ease-out,opacity 160ms ease-out;}
+.auti-orb--error .auti-orb__halo {background:radial-gradient(circle,rgba(255,104,112,.24),transparent 74%);}
+@media (prefers-reduced-motion:reduce) {.auti-orb__halo,.auti-orb__image {animation:none!important;transition:none!important;transform:none!important;}}
