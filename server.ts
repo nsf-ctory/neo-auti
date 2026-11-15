@@ -11,6 +11,16 @@ import { installLiveServer } from './live-server';
 dotenv.config();
 
 function getInferenceClient(): GoogleGenAI {
+  if (process.env.GEMINI_LIVE_PROVIDER === 'vertex') {
+    const project = process.env.GOOGLE_CLOUD_PROJECT;
+    if (!project) throw new Error('GOOGLE_CLOUD_PROJECT is required for Vertex Live');
+    return new GoogleGenAI({
+      vertexai: true,
+      project,
+      location: process.env.GOOGLE_CLOUD_LOCATION || 'us-central1',
+    });
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY environment variable is missing');
   return new GoogleGenAI({
