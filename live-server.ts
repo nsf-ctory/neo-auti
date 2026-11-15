@@ -88,7 +88,7 @@ export function installLiveServer(
           setupPending = true;
           try {
             session = await ai.live.connect({
-              model: 'gemini-3.1-flash-live-preview',
+              model: process.env.GEMINI_LIVE_MODEL || 'gemini-3.1-flash-live-preview',
               config: {
                 responseModalities: [Modality.AUDIO],
                 speechConfig: {
