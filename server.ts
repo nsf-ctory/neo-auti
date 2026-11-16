@@ -6,9 +6,10 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { aiLimits, AiBudget } from './ai-guard';
 import { AUTI_PUBLIC_INSTRUCTION } from './auti-policy';
+import { installHttpApiRoutes, installHttpSecurity } from './http-app';
 import { installLiveServer } from './live-server';
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 function getInferenceClient(): GoogleGenAI {
   if (process.env.GEMINI_LIVE_PROVIDER === 'vertex') {
@@ -35,30 +36,8 @@ async function startServer() {
   const limits = aiLimits();
   const aiBudget = new AiBudget(limits);
 
-  app.use((_req, res, next) => {
-    res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-    res.setHeader('Referrer-Policy', 'no-referrer');
-    res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=(), payment=(), usb=()');
-    res.setHeader('Content-Security-Policy', [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data:",
-      "connect-src 'self'",
-      "media-src 'self' blob: data:",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'self'",
-    ].join('; '));
-    next();
-  });
-
-  app.get('/api/health', (_req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
+  installHttpSecurity(app);
+  installHttpApiRoutes(app);
 
   const httpServer = http.createServer(app);
   installLiveServer(
@@ -76,7 +55,7 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    const distPath = path.join(process.cwd(), 'dist', 'client');
     for (const page of ['support', 'privacy', 'terms']) {
       app.get(`/${page}`, (_req, res) => res.sendFile(path.join(distPath, `${page}.html`)));
     }

@@ -8,6 +8,10 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     // O frontend não carrega o .env server-side nem expõe suas credenciais.
     envDir: false as const,
+    build: {
+      // Mantém o bundle Node fora da raiz pública servida pelo Express.
+      outDir: 'dist/client',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

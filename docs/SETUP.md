@@ -39,12 +39,19 @@ vazia rejeita chamadas de IA e evita publicar acidentalmente um endpoint aberto.
 
 | Rota | Método | Uso |
 | --- | --- | --- |
+| `/health` | `GET` | Alias público para o health check da Railway. |
 | `/api/health` | `GET` | Saúde do processo; não prova inferência nem voz. |
 | `/api/live` | WebSocket | Conversa de voz bidirecional. |
+
+Uma requisição HTTP comum para `/api/live` recebe `426`; somente o upgrade
+WebSocket abre a sessão. Rotas `/api/*` desconhecidas retornam JSON `404` e não
+caem no fallback da SPA.
 
 ## Segurança e dados
 
 - Não coloque segredos em variáveis `VITE_*` nem no bundle do frontend.
+- O frontend público fica em `dist/client`; o bundle Node permanece fora da
+  raiz estática.
 - O navegador não envia modelo nem system prompt.
 - Origin reduz abuso no navegador, mas não autentica clientes fora dele.
 - Os limites são locais ao processo; múltiplas réplicas multiplicam o teto.
