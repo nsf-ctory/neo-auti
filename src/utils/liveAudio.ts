@@ -75,8 +75,8 @@ export class LiveAudioPlayer {
           this.isPlaying = false;
         }
       };
-    } catch (err) {
-      console.error('Error playing Live audio chunk:', err);
+    } catch {
+      this.interrupt();
     }
   }
 

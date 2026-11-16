@@ -12,8 +12,18 @@ export function installLiveServer(
   limits: ReturnType<typeof aiLimits>,
   aiBudget: AiBudget,
   getGeminiClient: () => GoogleGenAI,
-  publicInstruction: string
+  publicInstruction: string,
+  liveVoice = 'Charon'
 ) {
+  const allowedVoices = new Set([
+    'Kore',
+    'Puck',
+    'Fenrir',
+    'Zephyr',
+    'Charon',
+  ]);
+  const selectedVoice = allowedVoices.has(liveVoice) ? liveVoice : 'Charon';
+
   const wss = new WebSocketServer({
     server: httpServer,
     path: '/api/live',
@@ -71,19 +81,7 @@ export function installLiveServer(
             clientWs.terminate();
             return;
           }
-          const { voice = 'Charon' } = msg.setup;
           const ai = getGeminiClient();
-          const allowedVoices = new Set([
-            'Kore',
-            'Puck',
-            'Fenrir',
-            'Zephyr',
-            'Charon',
-          ]);
-          const selectedVoice =
-            typeof voice === 'string' && allowedVoices.has(voice)
-              ? voice
-              : 'Kore';
 
           setupPending = true;
           try {

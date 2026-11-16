@@ -46,6 +46,7 @@ async function startServer() {
     aiBudget,
     getInferenceClient,
     AUTI_PUBLIC_INSTRUCTION,
+    process.env.AUTI_LIVE_VOICE || 'Charon',
   );
 
   if (process.env.NODE_ENV !== 'production') {
@@ -59,7 +60,42 @@ async function startServer() {
     for (const page of ['support', 'privacy', 'terms']) {
       app.get(`/${page}`, (_req, res) => res.sendFile(path.join(distPath, `${page}.html`)));
     }
-    app.use(express.static(distPath));
+    app.get('/sw.js', (_req, res) => {
+      res
+        .type('application/javascript')
+        .set({
+          'Cache-Control': 'no-cache, must-revalidate',
+          'Service-Worker-Allowed': '/',
+        })
+        .sendFile(path.join(distPath, 'sw.js'));
+    });
+    app.get('/manifest.webmanifest', (_req, res) => {
+      res
+        .type('application/manifest+json')
+        .set('Cache-Control', 'no-cache, must-revalidate')
+        .sendFile(path.join(distPath, 'manifest.webmanifest'));
+    });
+    for (const asset of [
+      ['robots.txt', 'text/plain'],
+      ['llms.txt', 'text/plain'],
+      ['sitemap.xml', 'application/xml'],
+    ] as const) {
+      app.get(`/${asset[0]}`, (_req, res) => {
+        res
+          .type(asset[1])
+          .set('Cache-Control', 'public, max-age=3600')
+          .sendFile(path.join(distPath, asset[0]));
+      });
+    }
+    app.use(
+      express.static(distPath, {
+        setHeaders: (res, filePath) => {
+          if (filePath.includes(`${path.sep}assets${path.sep}`)) {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          }
+        },
+      })
+    );
     app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
 

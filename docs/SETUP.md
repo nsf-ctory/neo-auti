@@ -25,6 +25,7 @@ O servidor usa a porta `3000` por padrão. Em desenvolvimento, origens
 | `PORT` | `3000` | Porta HTTP e WebSocket. |
 | `AUTI_AI_ENABLED` | habilitado | `false` impede novas sessões de inferência. |
 | `AUTI_ALLOWED_ORIGINS` | vazio em produção | Origens públicas exatas, separadas por vírgula. |
+| `AUTI_LIVE_VOICE` | `Charon` | Voz selecionada exclusivamente pelo servidor. |
 | `AUTI_AI_CONCURRENCY` | `8` | Sessões de voz simultâneas por processo. |
 | `AUTI_AI_STARTS_PER_MINUTE` | `30` | Novas sessões por minuto e por processo. |
 | `AUTI_LIVE_DURATION_MS` | `300000` | Duração máxima de uma conversa de voz. |
@@ -52,13 +53,23 @@ caem no fallback da SPA.
 - Não coloque segredos em variáveis `VITE_*` nem no bundle do frontend.
 - O frontend público fica em `dist/client`; o bundle Node permanece fora da
   raiz estática.
-- O navegador não envia modelo nem system prompt.
+- O navegador não envia modelo, voz nem system prompt.
 - Origin reduz abuso no navegador, mas não autentica clientes fora dele.
 - Os limites são locais ao processo; múltiplas réplicas multiplicam o teto.
 - A aplicação atual não implementa banco, conta, billing, storage remoto nem
   memória entre conversas.
 - Conteúdo de conversa é enviado ao adaptador de inferência configurado; termos
   e política de privacidade devem refletir o tratamento real antes de publicar.
+
+## PWA e descoberta
+
+- `manifest.webmanifest` identifica a instalação; os ícones declarados precisam
+  existir em `public/pwa-192.png` e `public/pwa-512.png`.
+- `sw.js` usa um nome de cache versionado. Atualize `CACHE_VERSION` quando o
+  shell público mudar; rotas `/api/`, health e o próprio Service Worker nunca
+  entram no cache.
+- `robots.txt`, `sitemap.xml` e `llms.txt` descrevem apenas superfícies públicas.
+  `robots.txt` orienta crawlers, mas não é controle de segurança para a API.
 
 ## Validação
 

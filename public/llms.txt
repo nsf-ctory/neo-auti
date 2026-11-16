@@ -1,0 +1,27 @@
+# Auti.
+
+> Serviço web de conversa por voz e apoio cotidiano, especialmente concebido para adultos autistas, sem exigir diagnóstico ou laudo.
+
+## Acesso público atual
+
+- URL canônica: https://auti.neoprotocol.space/
+- Interface: chamada de voz iniciada diretamente, sem cadastro.
+- Cobrança ao usuário: não implementada na versão pública atual.
+- Idioma padrão: português brasileiro.
+
+## Escopo e limites
+
+- Oferece acolhimento, organização cotidiana e autogestão cognitiva com linguagem adulta e respeitosa.
+- Não oferece diagnóstico, terapia, prescrição ou atendimento de emergência.
+- As respostas são geradas por IA e podem conter erros.
+- Não há memória persistente de conversas implementada pela aplicação.
+- Áudio é processado pela infraestrutura da Auti. e pelo provedor de inferência para realizar a conversa.
+
+## Documentos públicos
+
+- Privacidade: https://auti.neoprotocol.space/privacy
+- Termos: https://auti.neoprotocol.space/terms
+- Suporte: https://auti.neoprotocol.space/support
+- Sitemap: https://auti.neoprotocol.space/sitemap.xml
+
+Endpoints sob `/api/` são operacionais e não devem ser indexados.

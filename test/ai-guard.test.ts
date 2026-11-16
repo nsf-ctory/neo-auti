@@ -79,6 +79,50 @@ test('payload limit prevents oversized setup reaching provider', async t => {
   assert.equal(calls, 0);
 });
 
+test('provider policy and voice are owned by the server', async t => {
+  let connectOptions: any;
+  const config = limits();
+  const server = createServer();
+  const wsServer = installLiveServer(
+    server,
+    config,
+    new AiBudget(config),
+    () => ({
+      live: {
+        connect: async (options: any) => {
+          connectOptions = options;
+          return { close() {} };
+        },
+      },
+    }) as any,
+    'server-only-policy',
+    'Charon'
+  );
+  await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(async () => {
+    for (const client of wsServer.clients) client.terminate();
+    await new Promise<void>(resolve => wsServer.close(() => resolve()));
+    await new Promise<void>(resolve => server.close(() => resolve()));
+  });
+  const address = server.address() as { port: number };
+  const ws = new WebSocket(`ws://127.0.0.1:${address.port}/api/live`, { origin });
+  await once(ws, 'open');
+  ws.send(JSON.stringify({
+    setup: { voice: 'Puck', systemInstruction: 'client override' },
+  }));
+  await once(ws, 'message');
+
+  assert.equal(
+    connectOptions.config.systemInstruction,
+    'server-only-policy'
+  );
+  assert.equal(
+    connectOptions.config.speechConfig.voiceConfig.prebuiltVoiceConfig.voiceName,
+    'Charon'
+  );
+  ws.close();
+});
+
 test('live concurrency, message burst, idle setup and kill switch block provider use', async t => {
   let calls = 0;
   const url = await fixture(t, limits({ concurrency: 1, messagesPerSecond: 2, setupTimeoutMs: 100 }), async () => { calls++; return { close() {} }; });

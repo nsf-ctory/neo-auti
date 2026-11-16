@@ -11,6 +11,8 @@ export default defineConfig(() => {
     build: {
       // Mantém o bundle Node fora da raiz pública servida pelo Express.
       outDir: 'dist/client',
+      sourcemap: false,
+      minify: 'esbuild' as const,
     },
     resolve: {
       alias: {

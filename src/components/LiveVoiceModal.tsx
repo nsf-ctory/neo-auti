@@ -1,6 +1,6 @@
 import { Mic, MicOff, PhoneOff } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   LiveAudioPlayer,
   floatTo16BitPCM,
@@ -52,7 +52,8 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
         },
       });
       mediaStreamRef.current = stream;
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
       const inputCtx = new AudioCtx({ sampleRate: 16000 });
       inputAudioCtxRef.current = inputCtx;
       const source = inputCtx.createMediaStreamSource(stream);
@@ -61,12 +62,15 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
       source.connect(processor);
       processor.connect(inputCtx.destination);
       processor.onaudioprocess = (event) => {
-        if (isMutedRef.current || activeWs.readyState !== WebSocket.OPEN) return;
+        if (isMutedRef.current || activeWs.readyState !== WebSocket.OPEN)
+          return;
         const input = event.inputBuffer.getChannelData(0);
         let total = 0;
         for (const sample of input) total += Math.abs(sample);
         setUserVolume(Math.min(1, (total / input.length) * 5));
-        activeWs.send(JSON.stringify({ audio: pcmToBase64(floatTo16BitPCM(input)) }));
+        activeWs.send(
+          JSON.stringify({ audio: pcmToBase64(floatTo16BitPCM(input)) })
+        );
       };
     } catch {
       setStatus('error');
@@ -84,7 +88,7 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
     const ws = new WebSocket(`${protocol}//${window.location.host}/api/live`);
     wsRef.current = ws;
 
-    ws.onopen = () => ws.send(JSON.stringify({ setup: { voice: 'Charon' } }));
+    ws.onopen = () => ws.send(JSON.stringify({ setup: {} }));
     ws.onmessage = (event) => {
       if (!active) return;
       try {
@@ -118,7 +122,8 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
 
     return () => {
       active = false;
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (animationFrameRef.current)
+        cancelAnimationFrame(animationFrameRef.current);
       stopMicCapture();
       if (ws.readyState < WebSocket.CLOSING) ws.close();
       player.close();
@@ -136,9 +141,12 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
-      <div className={`auti-orb auti-orb--live ${status === 'error' ? 'auti-orb--error' : ''} relative flex h-80 w-80 items-center justify-center sm:h-112 sm:w-112`} style={orbStyle}>
+      <div
+        className={`auti-orb auti-orb--live ${status === 'error' ? 'auti-orb--error' : ''} relative flex h-80 w-80 items-center justify-center sm:h-112 sm:w-112`}
+        style={orbStyle}
+      >
         <div className="auti-orb__halo" aria-hidden="true" />
-        <img src="/ball_auti.png" alt="" className="auti-orb__image" />
+        <img src="/ball_auti.webp" alt="" className="auti-orb__image" />
       </div>
 
       <div className="absolute bottom-10 flex items-center gap-6">
@@ -148,7 +156,11 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
           aria-label={isMuted ? 'Ativar microfone' : 'Silenciar microfone'}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md"
         >
-          {isMuted ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+          {isMuted ? (
+            <MicOff className="h-5 w-5" />
+          ) : (
+            <Mic className="h-5 w-5" />
+          )}
         </button>
         <button
           type="button"
@@ -161,7 +173,9 @@ export function LiveVoiceModal({ isOpen, onClose }: LiveVoiceModalProps) {
       </div>
 
       <span className="sr-only" role="status" aria-live="polite">
-        {status === 'error' ? 'Não foi possível iniciar a chamada.' : 'Chamada em andamento.'}
+        {status === 'error'
+          ? 'Não foi possível iniciar a chamada.'
+          : 'Chamada em andamento.'}
       </span>
     </div>
   );

@@ -1,27 +1,32 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="icon" type="image/png" href="/ball_auti.png" />
-    <link rel="canonical" href="https://auti.neoprotocol.space/" />
-    <title>Auti. — Um espaço para se sentir abraçado através de uma conversa</title>
-    <meta name="description" content="Auti. é um espaço de conversa por voz, pensado especialmente para adultos autistas. Converse no seu tempo, sem cadastro, sem pressão e sem julgamento." />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
-    <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="Auti." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://auti.neoprotocol.space/" />
-    <meta property="og:title" content="Auti. — Um espaço para se sentir abraçado através de uma conversa" />
-    <meta property="og:description" content="Um espaço de conversa por voz, pensado especialmente para adultos autistas. Sem cadastro, sem pressão e no seu tempo." />
-    <meta property="og:image" content="https://auti.neoprotocol.space/ball_auti.png" />
-    <meta property="og:image:alt" content="Esfera visual da Auti." />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Auti. — Um espaço para se sentir abraçado através de uma conversa" />
-    <meta name="twitter:description" content="Uma conversa por voz, no seu tempo, sem cadastro e sem pressão." />
-    <meta name="twitter:image" content="https://auti.neoprotocol.space/ball_auti.png" />
-    <script type="application/ld+json">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/webp" href="/ball_auti.webp" />
+  <link rel="apple-touch-icon" href="/pwa-192.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="canonical" href="https://auti.neoprotocol.space/" />
+  <title>Auti. — Um espaço para se sentir abraçado através de uma conversa</title>
+  <meta name="description"
+    content="Auti. é um espaço de conversa por voz, pensado especialmente para adultos autistas. Converse no seu tempo, sem cadastro, sem pressão e sem julgamento." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Auti." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://auti.neoprotocol.space/" />
+  <meta property="og:title" content="Auti. — Um espaço para se sentir abraçado através de uma conversa" />
+  <meta property="og:description"
+    content="Um espaço de conversa por voz, pensado especialmente para adultos autistas. Sem cadastro, sem pressão e no seu tempo." />
+  <meta property="og:image" content="https://auti.neoprotocol.space/ball_auti.webp" />
+  <meta property="og:image:alt" content="Esfera visual da Auti." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Auti. — Um espaço para se sentir abraçado através de uma conversa" />
+  <meta name="twitter:description" content="Uma conversa por voz, no seu tempo, sem cadastro e sem pressão." />
+  <meta name="twitter:image" content="https://auti.neoprotocol.space/ball_auti.webp" />
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
@@ -32,15 +37,22 @@
         "applicationCategory": "CommunicationApplication",
         "operatingSystem": "Web",
         "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "BRL"
+        },
         "audience": {
           "@type": "Audience",
           "audienceType": "Adultos autistas"
         }
       }
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

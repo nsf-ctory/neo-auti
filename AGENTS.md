@@ -25,7 +25,7 @@ Marketing, TikTok Partner, `>_ neøtiko` ou neøflow.
 - O navegador nunca escolhe modelo, envia system prompt efetivo ou recebe
   credenciais e nomes de provedores subjacentes.
 - A experiência pública é exclusivamente uma chamada de voz por WebSocket.
-- O frontend mostra somente `ball_auti.png`; tocar inicia a chamada. Não
+- O frontend mostra somente `ball_auti.webp`; tocar inicia a chamada. Não
   adicionar chat, mensagem gravada, menus, descrições ou texto visível.
 - Preferências locais não equivalem a memória persistente.
 - Nós do workspace integram por contratos; não importar arquivos de outro nó.

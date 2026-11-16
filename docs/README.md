@@ -20,7 +20,7 @@ pública ou configuração ativa.
 ## Contrato do runtime
 
 - `auti-policy.ts` contém a projeção curta, pública e server-owned usada na voz.
-- A interface possui uma única ação: tocar em `ball_auti.png` para falar.
+- A interface possui uma única ação: tocar em `ball_auti.webp` para falar.
 - O frontend é não soberano: não define identidade, system prompt, modelo ou
   provedor.
 - `GEMINI_API_KEY` é uma variável técnica do adaptador atual e nunca pode ir ao

@@ -7,6 +7,7 @@ const healthHandler: RequestHandler = (_req, res) => {
 
 export function installHttpSecurity(app: Express) {
   app.set('trust proxy', 1);
+  app.disable('x-powered-by');
 
   app.use(
     helmet({
