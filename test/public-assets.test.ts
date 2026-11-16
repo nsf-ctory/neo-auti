@@ -57,3 +57,17 @@ test('browser setup carries no provider model, voice or system instruction', asy
   assert.match(liveClient, /JSON\.stringify\(\{ setup: \{\} \}\)/);
   assert.doesNotMatch(liveClient, /systemInstruction|GEMINI|Charon|Kore|Puck|Fenrir|Zephyr/);
 });
+
+test('the LCP image is discoverable and high priority in the initial document', async () => {
+  const html = await readFile('index.html', 'utf8');
+  const app = await readFile('src/App.tsx', 'utf8');
+
+  assert.match(
+    html,
+    /rel="preload" as="image" href="\/ball_auti\.webp" type="image\/webp" fetchpriority="high"/
+  );
+  assert.match(app, /loading="eager"/);
+  assert.match(app, /fetchPriority="high"/);
+  assert.match(app, /width=\{1065\}/);
+  assert.match(app, /height=\{1065\}/);
+});
