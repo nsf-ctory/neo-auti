@@ -1,5 +1,9 @@
 # Auti.
 
+<p align="center">
+  <img src="./public/ball_auti.png" alt="Esfera visual da Auti." width="176" />
+</p>
+
 **Nem toda conversa precisa começar com uma pergunta.**
 
 Há dias em que explicar é demais.  
@@ -21,6 +25,10 @@ Mas para abrir espaço a uma conversa que não exige performance.
 Uma experiência de conversa por voz, criada com atenção especial a adultos autistas. Sem cadastro. Sem roteiro obrigatório. Sem precisar provar nada.
 
 **[Conversar com a Auti.](https://auti.neoprotocol.space/)**
+
+<p align="center">
+  <a href="https://auti.neoprotocol.space/">auti.neoprotocol.space</a>
+</p>
 
 ### Por trás da voz
 
